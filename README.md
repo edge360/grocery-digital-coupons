@@ -2,12 +2,10 @@
 
 ## Quick Start
 
-1. Install the required libraries.
-  - [Python](https://www.python.org/downloads/)
-  - [pip](https://bootstrap.pypa.io/get-pip.py)
-  - [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+1. Install the required software for [Python](https://www.python.org/downloads/).
+2. Download the [pip](https://bootstrap.pypa.io/get-pip.py) script and install it with `python get-pip.py`
 2. Install Selenium with `pip install selenium`
-3. Copy chromedriver.exe to the same directory as this project.
+3. Download [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads) and copy `chromedriver.exe` to the project directory.
 4. Edit `config.ini` to include your login information.
 5. Run the script with `python grocery_coupons.py shoprite`
 
