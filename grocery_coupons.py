@@ -50,11 +50,14 @@ def shoprite():
         try:
             coupon_button.click()
             print 'Added', count, 'coupons!'
-            time.sleep(1)
+            time.sleep(.250)
         except:
             continue
 
     print 'Complete!'
+    
+    time.sleep(2)
+
     browser.close()
 
 
@@ -106,7 +109,7 @@ def stop_and_shop():
 
 if __name__ == "__main__":
     delay = 10
-    browser = webdriver.Firefox()
+    browser = webdriver.Chrome()
     parser = RawConfigParser()
     parser.read('config.ini')
 

@@ -1,16 +1,26 @@
 # Grocery Digital Coupon Automation
 
+## Quick Start
+
+1. Install the required libraries.
+  - [Python](https://www.python.org/downloads/)
+  - [pip](https://bootstrap.pypa.io/get-pip.py)
+  - [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+2. Install Selenium with `pip install selenium`
+3. Copy chromedriver.exe to the same directory as this project.
+4. Edit `config.ini` to include your login information.
+5. Run the script with `python grocery_coupons.py shoprite`
 
 ## Usage
+
 The script only supports [Shoprite](http://www.shoprite.com) and [Stop and Shop](http://www.stopandshop.com/) for now:
 
 1. `python grocery_coupons.py shoprite`
 2. `python grocery_coupons.py shop_and_shop`
 
-
 ## Dependencies
 [Selenium](http://selenium-python.readthedocs.io/index.html)
-
+[Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 
 ## More Info
 
