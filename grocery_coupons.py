@@ -11,6 +11,9 @@ def initialize():
     global browser
     browser = webdriver.Chrome()
 
+def test(email, password, delay):
+    return { 'email': email, 'count': 1 }
+
 def shoprite(email, password, delay):
     initialize()
 
@@ -58,6 +61,8 @@ def shoprite(email, password, delay):
     print 'Complete!'
     browser.close()
 
+    return { 'email': email, 'count': count }
+
 def stop_and_shop(email, password, delay):
     initialize()
 
@@ -104,3 +109,5 @@ def stop_and_shop(email, password, delay):
 
     print 'Complete!'
     browser.close()
+
+    return { 'email': email, 'count': count }

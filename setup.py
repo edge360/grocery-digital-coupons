@@ -9,6 +9,7 @@ def import_or_install(package):
 # Install required dependencies.
 import_or_install('requests')
 import_or_install('selenium')
+import_or_install('flask')
 
 import os.path
 from requests import get

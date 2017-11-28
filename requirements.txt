@@ -1,0 +1,4 @@
+requests
+selenium
+Flask
+gunicorn
