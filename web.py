@@ -45,9 +45,9 @@ def post_collect():
             
             # Run the method asynchronously.
             pool = Pool(processes=5)
-            pool.apply_async(grocery_coupons.shoprite, args=(username, password, 10), callback=onComplete)
+            pool.apply_async(grocery_coupons.shoprite, args=(username, password, key, 10), callback=onComplete)
 
-    return redirect('/collect/' + key) if key in data else jsonify({ 'status': 'MISSING LOGIN' })
+    return redirect('/result/' + key) if key in data else jsonify({ 'status': 'MISSING LOGIN' })
 
 @app.route('/collect/')
 @app.route('/collect/<key>')
@@ -60,6 +60,26 @@ def get_collect(key=None):
 
     return jsonify(result), 404 if result == {} else 200
 
+@app.route('/result/')
+@app.route('/result/<key>')
+def status(key=None):
+    username = None
+    count = None
+    screenshot = None
+    date = None
+    done = False
+
+    if key in data:
+        username = data[key]['username']
+        count = data[key]['count']
+        screenshot = data[key]['screenshot'] if 'screenshot' in data[key] else None
+        date = data[key]['endDate'] if 'endDate' in data[key] else data[key]['startDate']
+        done = True if 'endDate' in data[key] else False
+
+        return render_template('result.html', **locals())
+    else:
+        return redirect('/')
+
 def onComplete(result):
     # Get the key for the user.
     hasher = hashlib.sha1(result['email'])
@@ -69,6 +89,7 @@ def onComplete(result):
     data[key]['endDate'] = datetime.datetime.now()
     data[key]['status'] = 'IDLE'
     data[key]['count'] = result['count']
+    data[key]['screenshot'] = result['screenshot']
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
