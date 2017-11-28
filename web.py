@@ -3,6 +3,8 @@ import flask
 from flask import request
 from flask import Response
 from flask import jsonify
+from flask import render_template
+from flask import redirect
 import datetime
 import base64
 import hashlib
@@ -16,7 +18,7 @@ data = {}
 
 @app.route('/')
 def index():
-    return 'Hello World!'
+    return render_template('index.html')
 
 @app.route('/collect', methods = ['POST'])
 def post_collect():
@@ -45,7 +47,7 @@ def post_collect():
             pool = Pool(processes=5)
             pool.apply_async(grocery_coupons.shoprite, args=(username, password, 10), callback=onComplete)
 
-    return jsonify(data[key] if key in data else { 'status': 'MISSING LOGIN' }), 200 if key in data else 401
+    return redirect('/collect/' + key) if key in data else jsonify({ 'status': 'MISSING LOGIN' })
 
 @app.route('/collect/')
 @app.route('/collect/<key>')

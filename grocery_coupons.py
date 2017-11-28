@@ -30,11 +30,11 @@ def shoprite(email, password, delay):
 
     # Wait until the site loads, find the coupon frame
     WebDriverWait(browser, delay).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, '#cpsite, .field-validation-error'))
+        EC.visibility_of_element_located((By.CSS_SELECTOR, '#cpsite, .field-validation-error, .validation-summary-errors'))
     )
 
     # Check if the login succeeded.
-    fields = browser.find_elements_by_xpath("//*[contains(text(), 'incorrect')]")
+    fields = browser.find_elements_by_xpath("//*[contains(text(), 'incorrect') or contains(text(), 'try again')]")
     if len(fields) > 0:
         # Invalid login?
         count = -1
