@@ -43,7 +43,7 @@ def post_collect():
             
             # Run the method asynchronously.
             pool = Pool(processes=5)
-            pool.apply_async(grocery_coupons.shoprite, args=(username, password, 10,), callback=onComplete)
+            pool.apply_async(grocery_coupons.shoprite, args=(username, password, 10), callback=onComplete)
 
     return jsonify(data[key] if key in data else { 'status': 'MISSING LOGIN' }), 200 if key in data else 401
 
