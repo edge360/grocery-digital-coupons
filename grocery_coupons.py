@@ -1,21 +1,18 @@
-# Install dependencies.
-import subprocess
-subprocess.call(['python', 'setup.py'])
-
-import sys
 import time
-from ConfigParser import RawConfigParser
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+browser = None
 
-def shoprite():
-    # Get email/password from config file
-    email = parser.get('shoprite', 'email')
-    password = parser.get('shoprite', 'password')
+def initialize():
+    global browser
+    browser = webdriver.Chrome()
+
+def shoprite(email, password, delay):
+    initialize()
 
     # Visit the Digital Coupons page
     browser.get('http://coupons.shoprite.com/main.html')
@@ -59,13 +56,11 @@ def shoprite():
             continue
 
     print 'Complete!'
-    
-    time.sleep(2)
-
     browser.close()
 
+def stop_and_shop(email, password, delay):
+    initialize()
 
-def stop_and_shop():
     # Get email/password from config file
     email = parser.get('stop and shop', 'email')
     password = parser.get('stop and shop', 'password')
@@ -109,15 +104,3 @@ def stop_and_shop():
 
     print 'Complete!'
     browser.close()
-
-
-if __name__ == "__main__":
-    delay = 10
-    browser = webdriver.Chrome()
-    parser = RawConfigParser()
-    parser.read('config.ini')
-
-    if sys.argv[1] == 'shoprite':
-        shoprite()
-    elif sys.argv[1] == 'stop_and_shop':
-        stop_and_shop()
