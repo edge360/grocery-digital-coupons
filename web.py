@@ -47,7 +47,8 @@ def post_collect():
             pool = Pool(processes=5)
             pool.apply_async(grocery_coupons.shoprite, args=(username, password, key, 10), callback=onComplete)
 
-    return redirect('/result/' + key) if key in data else jsonify({ 'status': 'MISSING LOGIN' })
+    # Return an html or json view depending on the client.
+    return redirect('/result/' + key if 'text/html' in request.headers.get('Accept') else '/collect/' + key) if key in data else jsonify({ 'status': 'MISSING LOGIN' })
 
 @app.route('/collect/')
 @app.route('/collect/<key>')
