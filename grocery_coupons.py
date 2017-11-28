@@ -14,7 +14,7 @@ def initialize():
 def test(email, password, delay):
     return { 'email': email, 'count': 1 }
 
-def shoprite(email, password, delay):
+def shoprite(email, password, key, delay):
     initialize()
 
     # Visit the Digital Coupons page
@@ -65,10 +65,12 @@ def shoprite(email, password, delay):
             except:
                 continue
 
+    screenshot = browser.get_screenshot_as_base64()
+
     print 'Complete!'
     browser.close()
 
-    return { 'email': email, 'count': count }
+    return { 'email': email, 'count': count, 'screenshot':  screenshot }
 
 def stop_and_shop(email, password, delay):
     initialize()
