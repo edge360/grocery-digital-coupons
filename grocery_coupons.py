@@ -11,11 +11,13 @@ browser = None
 def initialize():
     global browser
 
+    path = os.getenv('GOOGLE_CHROME_SHIM') or None
+
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
+    options.binary_location = path
 
-    path = os.getenv('GOOGLE_CHROME_SHIM') or './chromedriver'
-    browser = webdriver.Chrome(path, chrome_options = options)
+    browser = webdriver.Chrome(executable_path='chromedriver', chrome_options = options)
 
     print 'Using ' + path
 
