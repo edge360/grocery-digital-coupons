@@ -16,24 +16,27 @@ def initialize():
     options = webdriver.ChromeOptions()
     options.binary_location = path
     if path:
-    	options.add_argument('headless')
+        options.add_argument('headless')
 
     browser = webdriver.Chrome(executable_path='chromedriver', chrome_options = options)
 
     print 'Using ' + (path or './chromedriver')
 
-def test(email, password, delay):
-    return { 'email': email, 'count': 1 }
+def test(email, password, delay = 10, callback = None, complete = None):
+    result = { 'email': email, 'count': 1 }
+    return result if not complete else complete(result)
 
-def shoprite(email, password, delay):
+def shoprite(email, password, delay = 10, callback = None, complete = None):
     initialize()
 
-    print 'Navigating to url.'
+    if callback:
+        callback('Navigating to url.', email)
 
     # Visit the Digital Coupons page
     browser.get('http://coupons.shoprite.com/main.html')
 
-    print 'Logging in.'
+    if callback:
+        callback('Logging in.', email)
 
     # Login
     WebDriverWait(browser, delay).until(
@@ -43,14 +46,16 @@ def shoprite(email, password, delay):
     browser.find_element_by_id('Password').send_keys(password)
     browser.find_element_by_id('Password').send_keys(Keys.RETURN)
 
-    print 'Waiting for site to load.'
+    if callback:
+        callback('Waiting for site to load.', email)
 
     # Wait until the site loads, find the coupon frame
     WebDriverWait(browser, delay).until(
         EC.visibility_of_element_located((By.CSS_SELECTOR, '#cpsite, .field-validation-error, .validation-summary-errors'))
     )
 
-    print 'Checking if login succeeded.'
+    if callback:
+        callback('Checking if login succeeded.', email)
 
     # Check if the login succeeded.
     fields = browser.find_elements_by_xpath("//*[contains(text(), 'incorrect') or contains(text(), 'try again')]")
@@ -79,19 +84,25 @@ def shoprite(email, password, delay):
         for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
             try:
                 coupon_button.click()
-                print 'Added', count, 'coupons!'
+
+                if callback:
+                    callback('Added', count, 'coupons!', email)
+
                 time.sleep(.250)
             except:
                 continue
 
     screenshot = browser.get_screenshot_as_base64()
 
-    print 'Complete!'
+    if callback:
+        callback('Complete!', email)
+
     browser.close()
 
-    return { 'email': email, 'count': count, 'screenshot':  screenshot }
+    result = { 'email': email, 'count': count, 'screenshot':  screenshot }
+    return result if not complete else complete(result)
 
-def stop_and_shop(email, password, delay):
+def stop_and_shop(email, password, delay = 10, callback = None, complete = None):
     initialize()
 
     # Get email/password from config file
@@ -130,12 +141,18 @@ def stop_and_shop(email, password, delay):
     for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
         try:
             coupon_button.click()
-            print 'Added', count, 'coupons!'
+            if callback:
+                callback('Added', count, 'coupons!', email)
             time.sleep(1)
         except:
             continue
 
-    print 'Complete!'
+    screenshot = browser.get_screenshot_as_base64()
+
+    if callback:
+        callback('Complete!', email)
+
     browser.close()
 
-    return { 'email': email, 'count': count }
+    result = { 'email': email, 'count': count, 'screenshot':  screenshot }
+    return result if not complete else complete(result)

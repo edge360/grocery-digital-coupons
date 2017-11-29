@@ -1,42 +1,32 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>Grocery Coupon Clipper | Results</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <!-- Bootstrap core CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-  </head>
-
-  <body>
-
-    <div class="container">
-      <div class="card">
-        <div class="card-body">
-          <h4 class="card-title">{{ username }}</h4>
-          <p class="card-text">
-            {{ count }} coupons added.
-          </p>
-          <p class="card-text">
-            {% if screenshot %}
-              <img class="card-img-bottom" src="data:image/png;base64,{{ screenshot }}" alt="Result">
+{% extends "layout.html" %}
+{% block title %}Results{% endblock %}
+{% block body %}
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">{{ username }}</h4>
+      <p class="card-text">
+        <div>{{ count if count > -1 else 0 }} coupons added.<div>
+        <div>Status: <span class='status'>{{ status }}</span></div>
+        <div>{{ message }}</div>
+      </p>
+      <small class="text-muted">
+        <div>Started on {{ startDate }}</div>
+        {% if endDate %}
+          <div>
+            {% if done %}
+              Completed
+            {% else %}
+              Updated
             {% endif %}
-
-            <small class="text-muted">
-              {% if done %}
-                Completed
-              {% else %}
-                Started
-              {% endif %}
-               on {{ date }}
-            </small>
-          </p>
-        </div>
-      </div>
-    </div> <!-- /container -->
-  </body>
-</html>
+             on {{ endDate }}
+          </div>
+        {% endif %}
+      </small>
+      <p class="card-text">
+        {% if screenshot %}
+          <img class="card-img-bottom img-thumbnail" src="data:image/png;base64,{{ screenshot }}" alt="Result">
+        {% endif %}
+      </p>
+    </div>
+  </div>
+{% endblock %}

@@ -10,6 +10,7 @@ def import_or_install(package):
 import_or_install('requests')
 import_or_install('selenium')
 import_or_install('flask')
+import_or_install('flask_sslify')
 
 import os.path
 from requests import get
