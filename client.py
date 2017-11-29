@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         if sys.argv[1] == 'shoprite':
-            grocery_coupons.shoprite(email, password, delay)
+            grocery_coupons.shoprite(email, password, None, delay)
         elif sys.argv[1] == 'stop_and_shop':
             grocery_coupons.stop_and_shop(email, password, delay)
         else:

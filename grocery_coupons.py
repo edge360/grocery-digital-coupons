@@ -1,3 +1,4 @@
+import os
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -9,7 +10,9 @@ browser = None
 
 def initialize():
     global browser
-    browser = webdriver.Chrome()
+
+    path = os.getenv('GOOGLE_CHROME_SHIM') or './chromedriver'
+    browser = webdriver.Chrome(path)
 
 def test(email, password, delay):
     return { 'email': email, 'count': 1 }
