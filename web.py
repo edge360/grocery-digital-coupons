@@ -20,6 +20,7 @@ data = {}
 
 @app.route('/')
 def index():
+    print 'test'
     return render_template('index.html')
 
 @app.route('/collect', methods = ['POST'])
