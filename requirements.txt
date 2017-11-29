@@ -2,3 +2,4 @@ requests
 selenium
 Flask
 gunicorn
+flask-sslify
