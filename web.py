@@ -20,7 +20,6 @@ data = {}
 
 @app.route('/')
 def index():
-    print 'test'
     return render_template('index.html')
 
 @app.route('/collect', methods = ['POST'])
@@ -47,7 +46,7 @@ def post_collect():
             data[key]['status'] = 'RUNNING'
             
             # Run the method asynchronously.
-            pool = Pool(processes=5)
+            pool = Pool(processes=1)
             pool.apply_async(grocery_coupons.shoprite, args=(username, password, key, 10), callback=onComplete)
 
     # Return an html or json view depending on the client.
