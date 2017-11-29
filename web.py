@@ -45,7 +45,7 @@ def post_collect():
         if data[key]['status'] != 'RUNNING':
             # Run the method asynchronously.
             data[key]['status'] = 'RUNNING'
-            thread = Thread(target=grocery_coupons.shoprite, args=(username, password, 10, onStatus, onComplete))
+            thread = Thread(target=grocery_coupons.shoprite, args=(username, password, 10, onStatus))
             thread.start()
 
     # Return an html or json view depending on the client.
@@ -88,31 +88,24 @@ def status(key=None):
     else:
         return redirect('/')
 
-def onComplete(result):
-    # Get the key for the user.
-    hasher = hashlib.sha1(result['email'])
-    key = base64.urlsafe_b64encode(hasher.digest()[0:20])
-
-    # Update the status with the result.
-    data[key]['endDate'] = datetime.datetime.now()
-    data[key]['status'] = 'IDLE'
-    data[key]['count'] = result['count']
-    data[key]['screenshot'] = result['screenshot']
-
-def onStatus(text, email):
+def onStatus(status):
     global data
 
     # Get the key for the user.
-    hasher = hashlib.sha1(email)
+    hasher = hashlib.sha1(status['email'])
     key = base64.urlsafe_b64encode(hasher.digest()[0:20])
-    print 'Using key ' + key
 
     # Update status.
     if key in data:
-        data[key]['message'] = text
+        data[key]['count'] = status['count']
+        data[key]['screenshot'] = status['screenshot']
+        data[key]['message'] = status['message']
         data[key]['lastUpdate'] = datetime.datetime.now()
+        if data[key]['message'] == 'Complete!':
+            data[key]['status'] = 'IDLE'
+            data[key]['endDate'] = datetime.datetime.now()
 
-    print text
+    print status['message']
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
