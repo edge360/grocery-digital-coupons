@@ -14,17 +14,18 @@ def initialize():
     path = os.getenv('GOOGLE_CHROME_SHIM') or None
 
     options = webdriver.ChromeOptions()
-    options.add_argument('headless')
     options.binary_location = path
+    if path:
+    	options.add_argument('headless')
 
     browser = webdriver.Chrome(executable_path='chromedriver', chrome_options = options)
 
-    print 'Using ' + path
+    print 'Using ' + (path or './chromedriver')
 
 def test(email, password, delay):
     return { 'email': email, 'count': 1 }
 
-def shoprite(email, password, key, delay):
+def shoprite(email, password, delay):
     initialize()
 
     print 'Navigating to url.'
