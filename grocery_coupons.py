@@ -11,8 +11,11 @@ browser = None
 def initialize():
     global browser
 
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+
     path = os.getenv('GOOGLE_CHROME_SHIM') or './chromedriver'
-    browser = webdriver.Chrome(path)
+    browser = webdriver.Chrome(path, chrome_options = options)
 
 def test(email, password, delay):
     return { 'email': email, 'count': 1 }
