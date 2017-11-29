@@ -17,14 +17,20 @@ def initialize():
     path = os.getenv('GOOGLE_CHROME_SHIM') or './chromedriver'
     browser = webdriver.Chrome(path, chrome_options = options)
 
+    print 'Using ' + path
+
 def test(email, password, delay):
     return { 'email': email, 'count': 1 }
 
 def shoprite(email, password, key, delay):
     initialize()
 
+    print 'Navigating to url.'
+
     # Visit the Digital Coupons page
     browser.get('http://coupons.shoprite.com/main.html')
+
+    print 'Logging in.'
 
     # Login
     WebDriverWait(browser, delay).until(
@@ -34,10 +40,14 @@ def shoprite(email, password, key, delay):
     browser.find_element_by_id('Password').send_keys(password)
     browser.find_element_by_id('Password').send_keys(Keys.RETURN)
 
+    print 'Waiting for site to load.'
+
     # Wait until the site loads, find the coupon frame
     WebDriverWait(browser, delay).until(
         EC.visibility_of_element_located((By.CSS_SELECTOR, '#cpsite, .field-validation-error, .validation-summary-errors'))
     )
+
+    print 'Checking if login succeeded.'
 
     # Check if the login succeeded.
     fields = browser.find_elements_by_xpath("//*[contains(text(), 'incorrect') or contains(text(), 'try again')]")
