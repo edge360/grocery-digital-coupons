@@ -5,6 +5,7 @@ from flask import Response
 from flask import jsonify
 from flask import render_template
 from flask import redirect
+from flask_sslify import SSLify
 import datetime
 import base64
 import hashlib
@@ -13,6 +14,7 @@ import grocery_coupons
 from ConfigParser import RawConfigParser
 
 app = flask.Flask(__name__)
+sslify = SSLify(app)
 
 data = {}
 
