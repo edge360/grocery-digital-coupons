@@ -7,8 +7,8 @@ import os
 import grocery_coupons
 from ConfigParser import RawConfigParser
 
-def onStatus(text, email):
-    print text
+def onStatus(status):
+    print status['message']
 
 if __name__ == "__main__":
     parser = RawConfigParser()
