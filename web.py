@@ -9,7 +9,7 @@ from flask_sslify import SSLify
 import datetime
 import base64
 import hashlib
-from multiprocessing import Pool
+from threading import Thread
 import grocery_coupons
 from ConfigParser import RawConfigParser
 
@@ -43,11 +43,10 @@ def post_collect():
             }
 
         if data[key]['status'] != 'RUNNING':
-            data[key]['status'] = 'RUNNING'
-            
             # Run the method asynchronously.
-            pool = Pool(processes=3)
-            pool.apply_async(grocery_coupons.shoprite, args=(username, password, 10), callback=onComplete)
+            data[key]['status'] = 'RUNNING'
+            thread = Thread(target=grocery_coupons.shoprite, args=(username, password, 10, onStatus, onComplete))
+            thread.start()
 
     # Return an html or json view depending on the client.
     return redirect('/result/' + key if 'text/html' in request.headers.get('Accept') else '/collect/' + key) if key in data else jsonify({ 'status': 'MISSING LOGIN' })
@@ -69,14 +68,20 @@ def status(key=None):
     username = None
     count = None
     screenshot = None
-    date = None
+    startDate = None
+    endDate = None
     done = False
+    status = None
+    message = None
 
     if key in data:
         username = data[key]['username']
         count = data[key]['count']
+        status = data[key]['status'].lower() if 'status' in data[key] else None
+        message = data[key]['message'] if 'message' in data[key] else None
         screenshot = data[key]['screenshot'] if 'screenshot' in data[key] else None
-        date = data[key]['endDate'] if 'endDate' in data[key] else data[key]['startDate']
+        startDate = data[key]['startDate']
+        endDate = data[key]['endDate'] if 'endDate' in data[key] else data[key]['lastUpdate'] if 'lastUpdate' in data[key] else None
         done = True if 'endDate' in data[key] else False
 
         return render_template('result.html', **locals())
@@ -93,6 +98,21 @@ def onComplete(result):
     data[key]['status'] = 'IDLE'
     data[key]['count'] = result['count']
     data[key]['screenshot'] = result['screenshot']
+
+def onStatus(text, email):
+    global data
+
+    # Get the key for the user.
+    hasher = hashlib.sha1(email)
+    key = base64.urlsafe_b64encode(hasher.digest()[0:20])
+    print 'Using key ' + key
+
+    # Update status.
+    if key in data:
+        data[key]['message'] = text
+        data[key]['lastUpdate'] = datetime.datetime.now()
+
+    print text
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
