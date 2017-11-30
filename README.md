@@ -5,8 +5,9 @@
 1. Install the required software for [Python](https://www.python.org/downloads/) *(version 2.7)*.
 2. Download the [pip](https://bootstrap.pypa.io/get-pip.py) script and install it with `python get-pip.py`
 3. Run the setup script `python setup.py`
-4. If on Linux, set the permissions of `chromedriver` to executable.
-5. Run the web app with `python web.py`
+4. Run the web app with `python web.py`
+
+*If on Linux, set the permissions of `chromedriver` to executable.*
 
 ## Usage
 
