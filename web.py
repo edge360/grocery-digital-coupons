@@ -1,4 +1,5 @@
 import sys
+import subprocess
 import flask
 from flask import request
 from flask import Response
@@ -108,4 +109,9 @@ def onStatus(status):
     print status['message']
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True)
+    if len(sys.argv) > 1:
+        if sys.argv[1] == 'install' or sys.argv[1] == '-install' or sys.argv[1] == '--install' or sys.argv[1] == 'i' or sys.argv[1] == '-i' or sys.argv[1] == '--i':
+            # Install dependencies.
+            subprocess.call(['python', 'setup.py'])
+    else:
+        app.run(debug=True, use_reloader=True)
