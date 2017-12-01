@@ -96,7 +96,7 @@ def shoprite(email, password, delay = 10, callback = None):
                 coupon_button.click()
 
                 if callback:
-                    result['message'] = 'Added', count, 'coupons!'
+                    result['message'] = 'Added ' + str(count) + ' coupons!'
                     result['count'] = count
                     callback(result)
 
@@ -154,7 +154,7 @@ def stop_and_shop(email, password, delay = 10, callback = None, complete = None)
         try:
             coupon_button.click()
             if callback:
-                result['message'] = 'Added', count, 'coupons!'
+                result['message'] = 'Added ' + str(count) + ' coupons!'
                 result['count'] = count
                 callback(result)
             time.sleep(1)
