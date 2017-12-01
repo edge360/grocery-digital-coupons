@@ -20,6 +20,14 @@ The script only supports [Shoprite](http://www.shoprite.com) and [Stop and Shop]
 [Selenium](http://selenium-python.readthedocs.io/index.html)
 [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 
+## Hosting on Heroku
+
+[gunicorn](http://gunicorn.org/) is the web server used for hosting on Heroku. Since a global variable is used to maintain status updates during processing, you'll need to set the number of [workers](http://docs.gunicorn.org/en/stable/settings.html#worker-processes) to `1`. Additionally, you should turn on [session affinity](https://devcenter.heroku.com/articles/session-affinity).
+
+1. In Heroku, the set environment config variable `WEB_CONCURRENCY` to `1`. Alternatively, edit [Procfile](https://github.com/primaryobjects/grocery-digital-coupons/blob/web/Procfile) and set the line to `web: gunicorn web:app --log-file - -w 1`
+
+2. Enable session affinity: `heroku features:enable http-session-affinity`
+  
 ## More Info
 
 ### What are grocery digital coupons?
