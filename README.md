@@ -17,8 +17,8 @@ The script only supports [Shoprite](http://www.shoprite.com) and [Stop and Shop]
 2. `python grocery_coupons.py shop_and_shop`
 
 ## Dependencies
-[Selenium](http://selenium-python.readthedocs.io/index.html)
-[Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+- [Selenium](http://selenium-python.readthedocs.io/index.html)
+- [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 
 ## Hosting on Heroku
 
