@@ -27,33 +27,43 @@ def shoprite(email, password, delay):
 
     # Wait until the site loads, find the coupon frame
     WebDriverWait(browser, delay).until(
-        EC.visibility_of_element_located((By.ID, 'cpsite'))
-    )
-    coupons_frame = browser.find_element_by_id('cpsite')
-
-    # Find the coupon link in the coupon frame
-    coupons_frame_link = coupons_frame.get_attribute("src")
-
-    # Visit the coupon link, look for the page numbers section
-    browser.get(coupons_frame_link)
-
-    WebDriverWait(browser, delay).until(
-        EC.visibility_of_element_located((By.CLASS_NAME, 'paging'))
+        EC.visibility_of_element_located((By.CSS_SELECTOR, '#cpsite, .field-validation-error, .validation-summary-errors'))
     )
 
-    # Click the link to show all coupons
-    browser.execute_script('onShowAll()')
+    # Check if the login succeeded.
+    fields = browser.find_elements_by_xpath("//*[contains(text(), 'incorrect') or contains(text(), 'try again')]")
+    if len(fields) > 0:
+        # Invalid login?
+        count = -1
+    else:
+        coupons_frame = browser.find_element_by_id('cpsite')
 
-    # Click all the buttons to add the coupons to your card
-    list_of_coupon_buttons = browser.find_elements_by_class_name('load2crd')
+        # Find the coupon link in the coupon frame
+        coupons_frame_link = coupons_frame.get_attribute("src")
 
-    for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
-        try:
-            coupon_button.click()
-            print 'Added', count, 'coupons!'
-            time.sleep(.250)
-        except:
-            continue
+        # Visit the coupon link, look for the page numbers section
+        browser.get(coupons_frame_link)
+
+        WebDriverWait(browser, delay).until(
+            EC.visibility_of_element_located((By.CLASS_NAME, 'paging'))
+        )
+
+        # Click the link to show all coupons
+        browser.execute_script('onShowAll()')
+
+        existingCount = len(browser.find_elements_by_class_name('clipped-img'))
+        print existingCount, 'coupons already loaded.'
+
+        # Click all the buttons to add the coupons to your card
+        list_of_coupon_buttons = browser.find_elements_by_class_name('load2crd')
+
+        for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
+            try:
+                coupon_button.click()
+                print 'Added', count, 'coupons!'
+                time.sleep(.250)
+            except:
+                continue
 
     print 'Complete!'
     browser.close()
