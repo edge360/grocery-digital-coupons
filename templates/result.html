@@ -5,9 +5,22 @@
     <div class="card-body">
       <h4 class="card-title">{{ username }}</h4>
       <p class="card-text">
-        <div>{{ count if count > -1 else 0 }} coupons added.<div>
-        <div>Status: <span class='status'>{{ status }}</span></div>
-        <div>{{ message }}</div>
+        <div class='text-secondary'>
+          <span class='font-weight-bold'>
+            {{ existingCount if existingCount > -1 else 0 }}
+          </span> coupons already loaded.
+        </div>
+        <div class='text-success'>
+          <span class='font-weight-bold'>
+            {{ count if count > -1 else 0 }}
+          </span> coupons added.
+        </div>
+        <div>
+          Status: <span class='status'>{{ status }}</span>
+        </div>
+        {% if message %}
+          <div>{{ message }}</div>
+        {% endif %}
       </p>
       <small class="text-muted">
         <div>Started on {{ startDate }}</div>

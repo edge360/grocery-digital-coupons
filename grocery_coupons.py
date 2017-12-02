@@ -23,7 +23,7 @@ def initialize():
     print 'Using ' + (path or './chromedriver')
 
 def test(email, password, delay = 10, callback = None):
-    result = { 'email': email, 'count': 0, 'message': None, 'screenshot': None }
+    result = { 'email': email, 'existingCount': 0, 'count': 0, 'message': None, 'screenshot': None }
 
     if callback:
         callback(result)
@@ -31,7 +31,7 @@ def test(email, password, delay = 10, callback = None):
     return result
 
 def shoprite(email, password, delay = 10, callback = None):
-    result = { 'email': email, 'count': 0, 'message': None, 'screenshot': None }
+    result = { 'email': email, 'existingCount': 0, 'count': 0, 'message': None, 'screenshot': None }
 
     initialize()
 
@@ -87,6 +87,12 @@ def shoprite(email, password, delay = 10, callback = None):
 
         # Click the link to show all coupons
         browser.execute_script('onShowAll()')
+
+        existingCount = len(browser.find_elements_by_class_name('clipped-img'))
+        if callback:
+            result['message'] = str(existingCount) + ' coupons already loaded.'
+            result['existingCount'] = existingCount
+            callback(result)
 
         # Click all the buttons to add the coupons to your card
         list_of_coupon_buttons = browser.find_elements_by_class_name('load2crd')
