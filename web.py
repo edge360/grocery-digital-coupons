@@ -39,7 +39,8 @@ def post_collect():
                 'username': username,
                 'startDate': datetime.datetime.now(),
                 'status': 'IDLE',
-                'count': 0
+                'count': 0,
+                'existingCount': 0
             }
 
         if data[key]['status'] != 'RUNNING':
@@ -65,18 +66,10 @@ def get_collect(key=None):
 @app.route('/result/')
 @app.route('/result/<key>')
 def status(key=None):
-    username = None
-    count = None
-    screenshot = None
-    startDate = None
-    endDate = None
-    done = False
-    status = None
-    message = None
-
     if key in data:
         username = data[key]['username']
         count = data[key]['count']
+        existingCount = data[key]['existingCount']
         status = data[key]['status'].lower() if 'status' in data[key] else None
         message = data[key]['message'] if 'message' in data[key] else None
         screenshot = data[key]['screenshot'] if 'screenshot' in data[key] else None
@@ -98,6 +91,7 @@ def onStatus(status):
     # Update status.
     if key in data:
         data[key]['count'] = status['count']
+        data[key]['existingCount'] = status['existingCount']
         data[key]['screenshot'] = status['screenshot']
         data[key]['message'] = status['message']
         data[key]['lastUpdate'] = datetime.datetime.now()
