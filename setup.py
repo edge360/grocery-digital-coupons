@@ -11,6 +11,7 @@ import_or_install('requests')
 import_or_install('selenium')
 import_or_install('flask')
 import_or_install('flask_sslify')
+import_or_install('PyJWT')
 
 import os.path
 from requests import get
