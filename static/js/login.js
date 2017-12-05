@@ -15,6 +15,10 @@ $(function() {
           else {
             $('#error').text(data.error).removeClass('invisible');
           }
+        },
+        error: function(data, status, message) {
+          console.error('Error logging in: ' + status + ' ' + message);
+          console.error(data);
         }
     });
   });

@@ -66,7 +66,7 @@ var onInitialize = function() {
       contentType: 'application/json',
       success: function(data) {
         console.log(data);
-        window.location = '/';
+        window.location = '/login';
       },
       error: function(data, status, message) {
         console.error(data.responseJSON);
