@@ -9,6 +9,7 @@ from flask import g
 from flask_sslify import SSLify
 import jwt
 from datetime import datetime, timedelta
+from copy import copy
 from threading import Thread
 import grocery_coupons
 from ConfigParser import RawConfigParser
@@ -17,7 +18,6 @@ app = flask.Flask(__name__)
 sslify = SSLify(app)
 
 data = {} # In-memory session.
-auth = {} # In-memory storage of user auth data (user/pass).
 
 secret = 'x0Wm5hfk78cBaG2MkM1d' # Token secret key.
 
@@ -55,14 +55,12 @@ def login():
             # Set user in session variable.
             data[username] = {
                 'username': username,
+                'password': password,
                 'startDate': datetime.now(),
                 'status': 'IDLE',
                 'count': 0,
                 'existingCount': 0
             }
-
-            # Set pass in session variable.
-            auth[username] = password;
 
             # Collect coupons.
             onCollect(username, password)
@@ -79,7 +77,7 @@ def coupons():
         payload = g.payload
         username = payload['username']
         
-        password = auth[username] if username in auth else None
+        password = data[username]['password'] if username in data else None
 
         # Collect coupons.
         error = onCollect(username, password)
@@ -101,8 +99,11 @@ def status():
             payload = g.payload
             username = payload['username']
 
-            result = data[username] if username in data else None
-            
+            # Get the data to return, make a copy so we can remove sensitive info (pass) before sending to client.
+            result = copy(data[username]) if username in data else None
+            if result:
+                del result['password']
+
             error = None if result else 'No data for ' + username
             noData = True if error else False
         except Exception, e:
@@ -123,10 +124,6 @@ def delete():
     if not g.error:
         payload = g.payload
         username = payload['username']
-
-        # Delete the username.
-        if username in auth:
-            auth.pop(username)
 
         error = None if username in data and data.pop(username) else 'No data for ' + username
         noData = True if error else False

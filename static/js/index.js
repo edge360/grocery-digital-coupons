@@ -6,7 +6,7 @@ $(function() {
   onInitialize();
 });
 
-var onStatus = function() {
+var onStatus = function(init) {
   // Get status from /api/status?token=
   $.ajax({
       type: 'GET',
@@ -52,8 +52,13 @@ var onStatus = function() {
         }
       },
       error: function(data, status, message) {
-        console.error(data.responseJSON);
-        document.location = '/login';
+        var message = 'Error loading status. ' + (data.responseJSON ? data.responseJSON.error : message);
+        console.error(message);
+        $('#error').text(message).removeClass('d-none');
+
+        if (init) {
+          document.location = '/login';
+        }
       }
   });
 }
@@ -69,12 +74,14 @@ var onInitialize = function() {
         window.location = '/login';
       },
       error: function(data, status, message) {
-        console.error(data.responseJSON);
-        $('#error').text(data.error).removeClass('invisible');
+        var message = 'Error logging out. ' + (data.responseJSON ? data.responseJSON.error : message);
+        console.error(message);
+        
+        document.location = '/login';
       }
     });
   });
 
   // Render status and start refresh.
-  onStatus();
+  onStatus(true);
 }
