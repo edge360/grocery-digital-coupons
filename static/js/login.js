@@ -10,7 +10,8 @@ $(function() {
         data: JSON.stringify({ username: $('#username').val(), password: $('#password').val() }),
         success: function(data) {
           if (!data.error) {
-            document.location = '/?token=' + data.token;
+            sessionStorage['token'] = data.token;
+            document.location = '/';
           }
           else {
             $('#error').text(data.error).removeClass('invisible');
@@ -21,5 +22,8 @@ $(function() {
           console.error(data);
         }
     });
+
+    e.preventDefault();
+    return false;
   });
 });

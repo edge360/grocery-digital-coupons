@@ -10,8 +10,11 @@ var onStatus = function(init) {
   // Get status from /api/status?token=
   $.ajax({
       type: 'GET',
-      url: '/api/status?token=' + param('token'),
+      url: '/api/status',
       contentType: 'application/json',
+      headers: {
+        'token': sessionStorage['token']
+      },
       success: function(data) {
         if (!data.error) {
           $('#result').removeClass('d-none');
@@ -67,9 +70,14 @@ var onInitialize = function() {
   $('#logout').click(function() {
     $.ajax({
       type: 'DELETE',
-      url: '/api/status?token=' + param('token'),
+      url: '/api/status',
       contentType: 'application/json',
+      headers: {
+        'token': sessionStorage['token']
+      },
       success: function(data) {
+        sessionStorage.removeItem('token');
+        
         console.log(data);
         window.location = '/login';
       },
