@@ -3,3 +3,4 @@ selenium
 Flask
 gunicorn
 flask-sslify
+PyJWT
