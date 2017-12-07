@@ -1,8 +1,4 @@
-function param(name) {
-    return (location.search.split(name + '=')[1] || '').split('&')[0];
-}
-
-$(function() {
+$(() => {
   onInitialize();
 });
 
@@ -15,7 +11,7 @@ var onStatus = function(init) {
       headers: {
         'token': sessionStorage['token']
       },
-      success: function(data) {
+      success: data => {
         if (!data.error) {
           $('#result').removeClass('d-none');
           $('#logout').removeClass('d-none');
@@ -29,7 +25,7 @@ var onStatus = function(init) {
           $('#message').text(data.message);
           $('#startDate').text(data.startDate);
 
-          var message = '';
+          let message = '';
           if (data.endDate) {
             $('#progress').addClass('d-none');
             message = 'Completed';
@@ -38,7 +34,7 @@ var onStatus = function(init) {
             message = 'Updated';
 
             // Continue refresh.
-            setTimeout(function() {
+            setTimeout(() => {
               onStatus();
             }, 2000);
           }
@@ -47,15 +43,17 @@ var onStatus = function(init) {
           $('#endDate').text(message);
 
           if (data.screenshot) {
-            $('#screenshot').html('<img class="card-img-bottom img-thumbnail" src="data:image/png;base64,' + data.screenshot + '" alt="Result">');
+            $('#screenshot').html(`<img class='card-img-bottom img-thumbnail' src='data:image/png;base64,${data.screenshot}' alt='Result'>`);
           }
         }
         else {
           $('#error').text(data.error).removeClass('invisible');
         }
       },
-      error: function(data, status, message) {
-        var message = 'Error loading status. ' + (data.responseJSON ? data.responseJSON.error : message);
+      error: (data, status, message) => {
+        const str = data.responseJSON ? data.responseJSON.error : message;
+
+        message = `Error loading status. ${str}`;
         console.error(message);
         $('#error').text(message).removeClass('d-none');
 
@@ -75,14 +73,16 @@ var onInitialize = function() {
       headers: {
         'token': sessionStorage['token']
       },
-      success: function(data) {
+      success: data => {
         sessionStorage.removeItem('token');
         
         console.log(data);
         window.location = '/login';
       },
-      error: function(data, status, message) {
-        var message = 'Error logging out. ' + (data.responseJSON ? data.responseJSON.error : message);
+      error: (data, status, message) => {
+        const str = data.responseJSON ? data.responseJSON.error : message;
+
+        message = `Error logging out. ${str}`;
         console.error(message);
         
         document.location = '/login';
