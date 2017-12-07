@@ -86,10 +86,11 @@ def coupons():
         error = 'Invalid token.'
         message = str(g.exception)
     
-    return jsonify({ 'status': 'Running' }) if not error else jsonify({ 'error': error, 'message': message }), 200 if not error else 404 if noData else 401
+    return apiResult('Running', error, message, noData)
 
 @app.route('/api/status')
 def status():
+    result = None
     error = None
     message = None
     noData = False
@@ -113,7 +114,7 @@ def status():
         error = g.error
         message = str(g.exception)
 
-    return jsonify(result) if not error else jsonify({ 'error': error, 'message': message }), 200 if not error else 404 if noData else 401
+    return apiResult(result, error, message, noData)
 
 @app.route('/api/status', methods = ['DELETE'])
 def delete():
@@ -131,7 +132,7 @@ def delete():
         error = g.error
         message = str(g.exception) if 'exception' in g else None
 
-    return jsonify({ 'status': 'Deleted' }) if not error else jsonify({ 'error': error, 'message': message }), 200 if not error else 404 if noData else 401
+    return apiResult('Deleted', error, message, noData)
 
 @app.route('/login')
 def loginView():
@@ -178,6 +179,12 @@ def onStatus(status):
             data[username]['endDate'] = datetime.now()
 
     print status['message']
+
+def apiResult(payload, error, message, noData):
+    if type(payload) is str:
+        payload = { 'status': payload }
+
+    return jsonify(payload) if not error else jsonify({ 'error': error, 'message': message }), 200 if not error else 404 if noData else 401
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
