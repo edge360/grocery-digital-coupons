@@ -1,5 +1,7 @@
 # Grocery Digital Coupon Automation
 
+Also available as a [web app](https://github.com/primaryobjects/grocery-digital-coupons/tree/web).
+
 ## Quick Start
 
 1. Install the required software for [Python](https://www.python.org/downloads/) *(version 2.7)*.
