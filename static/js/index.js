@@ -39,8 +39,9 @@ var onStatus = function(init) {
             }, 2000);
           }
 
-          message += ' on ' + data.endDate || data.lastUpdate;
-          $('#endDate').text(message);
+          const date = data.endDate || data.lastUpdate;
+          message += ' on ' + date;
+          $('#endDate').text(date ? message : '');
 
           if (data.screenshot) {
             $('#screenshot').html(`<img class='card-img-bottom img-thumbnail' src='data:image/png;base64,${data.screenshot}' alt='Result'>`);
