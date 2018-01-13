@@ -12,43 +12,51 @@ var onStatus = function(init) {
         'token': sessionStorage['token']
       },
       success: data => {
-        if (!data.error) {
-          $('#result').removeClass('d-none');
-          $('#logout').removeClass('d-none');
-          $('#progress').removeClass('d-none');
+        $('#result').removeClass('d-none');
+        $('#logout').removeClass('d-none');
+        $('#progress').removeClass('d-none');
 
-          // Render status.
-          $('#resultTitle').text(data.username);
-          $('#existingCount').text(data.existingCount || 0);
-          $('#count').text(data.count || 0);
-          $('#status').text(data.status || 'None');
-          $('#message').text(data.message);
-          $('#startDate').text(data.startDate);
+        // Render status.
+        $('#resultTitle').text(data.username);
+        $('#existingCount').text(data.existingCount || 0);
+        $('#count').text(data.count || 0);
+        $('#status').text(data.status || 'None');
+        $('#message').text(data.message);
+        $('#startDate').text(data.startDate);
 
-          let message = '';
-          if (data.endDate) {
-            $('#progress').addClass('d-none');
-            message = 'Completed';
-          }
-          else {
-            message = 'Updated';
-
-            // Continue refresh.
-            setTimeout(() => {
-              onStatus();
-            }, 2000);
-          }
-
-          const date = data.endDate || data.lastUpdate;
-          message += ' on ' + date;
-          $('#endDate').text(date ? message : '');
-
-          if (data.screenshot) {
-            $('#screenshot').html(`<img class='card-img-bottom img-thumbnail' src='data:image/png;base64,${data.screenshot}' alt='Result'>`);
-          }
+        let message = '';
+        if (data.endDate) {
+          $('#progress').addClass('d-none');
+          message = 'Completed';
         }
         else {
-          $('#error').text(data.error).removeClass('invisible');
+          message = 'Updated';
+
+          // Continue refresh.
+          setTimeout(() => {
+            onStatus();
+          }, 2000);
+        }
+
+        const date = data.endDate || data.lastUpdate;
+        message += ' on ' + date;
+        $('#endDate').text(date ? message : '');
+        if (!data.endDate) {
+          let lastRefresh = new Date() + '';
+          const index = lastRefresh.indexOf('GMT');
+          lastRefresh = lastRefresh.substring(0, index + 3);
+          $('#lastRefresh').text(`Refreshed on ${lastRefresh}`);
+        }
+        else {
+          $('#lastRefresh').text('');
+        }
+
+        if (data.screenshot) {
+          $('#screenshot').html(`<img class='card-img-bottom img-thumbnail' src='data:image/png;base64,${data.screenshot}' alt='Result'>`);
+        }
+
+        if (data.error) {
+          $('#error').text(data.error).removeClass('d-none');
         }
       },
       error: (data, status, message) => {

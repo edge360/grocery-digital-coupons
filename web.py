@@ -177,6 +177,7 @@ def onStatus(status):
         if data[username]['message'] in ('Complete!', 'Error'):
             data[username]['status'] = 'IDLE'
             data[username]['endDate'] = datetime.now()
+            data[username]['error'] = status['error'] if 'error' in status else None
 
     print status['message']
 
