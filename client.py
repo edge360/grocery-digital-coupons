@@ -7,6 +7,11 @@ import os
 import grocery_coupons
 from ConfigParser import RawConfigParser
 
+def onStatus(status):
+    print status['message']
+    if 'error' in status:
+        print status['error']
+
 if __name__ == "__main__":
     parser = RawConfigParser()
     parser.read('config.ini')
@@ -18,9 +23,9 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         if sys.argv[1] == 'shoprite':
-            grocery_coupons.shoprite(email, password, delay)
+            grocery_coupons.shoprite(email, password, delay, onStatus)
         elif sys.argv[1] == 'stop_and_shop':
-            grocery_coupons.stop_and_shop(email, password, delay)
+            grocery_coupons.stop_and_shop(email, password, delay, onStatus)
         else:
             print 'Unknown site [' + sys.argv[1] + ']'
     else:
