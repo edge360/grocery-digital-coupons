@@ -9,6 +9,8 @@ from ConfigParser import RawConfigParser
 
 def onStatus(status):
     print status['message']
+    if 'error' in status:
+        print status['error']
 
 if __name__ == "__main__":
     parser = RawConfigParser()
