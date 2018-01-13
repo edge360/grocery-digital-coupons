@@ -174,7 +174,7 @@ def onStatus(status):
         data[username]['screenshot'] = status['screenshot']
         data[username]['message'] = status['message']
         data[username]['lastUpdate'] = datetime.now()
-        if data[username]['message'] == 'Complete!':
+        if data[username]['message'] in ('Complete!', 'Error'):
             data[username]['status'] = 'IDLE'
             data[username]['endDate'] = datetime.now()
 

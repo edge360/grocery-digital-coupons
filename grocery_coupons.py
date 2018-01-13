@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import UnexpectedAlertPresentException
 
 browser = None
 
@@ -36,85 +37,115 @@ def shoprite(email, password, delay = 10, callback = None):
     initialize()
 
     if callback:
-        result['message'] = 'Navigating to url.'
+        result['message'] = 'Navigating to login.'
         callback(result)
 
-    # Visit the Digital Coupons page
-    browser.get('http://coupons.shoprite.com/main.html')
+    try:
+        browser.get('http://plan.shoprite.com/User/Authenticate')
 
-    if callback:
-        result['message'] = 'Logging in.'
-        callback(result)
-
-    # Login
-    WebDriverWait(browser, delay).until(
-        EC.presence_of_element_located((By.ID, "Email"))
-    )
-    browser.find_element_by_id('Email').send_keys(email)
-    browser.find_element_by_id('Password').send_keys(password)
-    browser.find_element_by_id('Password').send_keys(Keys.RETURN)
-
-    if callback:
-        result['message'] = 'Waiting for site to load.'
-        callback(result)
-
-    # Wait until the site loads, find the coupon frame
-    WebDriverWait(browser, delay).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, '#cpsite, .field-validation-error, .validation-summary-errors'))
-    )
-
-    if callback:
-        result['message'] = 'Checking if login succeeded.'
-        callback(result)
-
-    # Check if the login succeeded.
-    fields = browser.find_elements_by_xpath("//*[contains(text(), 'incorrect') or contains(text(), 'try again')]")
-    if len(fields) > 0:
-        # Invalid login?
-        count = -1
-    else:
-        coupons_frame = browser.find_element_by_id('cpsite')
-
-        # Find the coupon link in the coupon frame
-        coupons_frame_link = coupons_frame.get_attribute("src")
-
-        # Visit the coupon link, look for the page numbers section
-        browser.get(coupons_frame_link)
-
-        WebDriverWait(browser, delay).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, 'paging'))
-        )
-
-        # Click the link to show all coupons
-        browser.execute_script('onShowAll()')
-
-        existingCount = len(browser.find_elements_by_class_name('clipped-img'))
         if callback:
-            result['message'] = str(existingCount) + ' coupons already loaded.'
-            result['existingCount'] = existingCount
+            result['message'] = 'Entering login details.'
             callback(result)
 
-        # Click all the buttons to add the coupons to your card
-        list_of_coupon_buttons = browser.find_elements_by_class_name('load2crd')
+        # Login
+        WebDriverWait(browser, delay).until(
+            EC.presence_of_element_located((By.ID, "Email"))
+        )
 
-        for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
-            try:
-                coupon_button.click()
+        # Send login info.
+        browser.find_element_by_id('Email').send_keys(email)
+        browser.find_element_by_id('Password').send_keys(password)
+        browser.find_element_by_id('Password').send_keys(Keys.RETURN)
 
-                if callback:
-                    result['message'] = 'Added ' + str(count) + ' coupons!'
-                    result['count'] = count
-                    callback(result)
+        if callback:
+            result['message'] = 'Signing in.'
+            callback(result)
 
-                time.sleep(.250)
-            except:
-                continue
+        # Wait until the site loads, find the welcome page or error message.
+        WebDriverWait(browser, delay).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '.headerSso__welcome, .field-validation-error, .validation-summary-errors'))
+        )
 
-    result['screenshot'] = browser.get_screenshot_as_base64()
+        if callback:
+            result['message'] = 'Checking if login succeeded.'
+            callback(result)
 
-    if callback:
-        result['message'] = 'Complete!'
-        callback(result)
+        # Check if the login succeeded.
+        fields = browser.find_elements_by_xpath("//*[contains(text(), 'incorrect') or contains(text(), 'try again')]")
+        if len(fields) > 0:
+            # Invalid login?
+            result['message'] = 'Error'
+            result['error'] = 'Invalid login.'
+            callback(result)
+            count = -1
+        else:
+            if callback:
+                result['message'] = 'Navigating to coupons.'
+                callback(result)
+
+            browser.get('http://coupons.shoprite.com')
+
+            WebDriverWait(browser, delay).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, '#coupon-center-title'))
+            )
+
+            if callback:
+                result['message'] = 'Loading all coupons.'
+                callback(result)
+
+            WebDriverWait(browser, delay).until(
+                EC.visibility_of_element_located((By.CLASS_NAME, "coupon-item"))
+            )
+
+            # Click the link to show all coupons
+            btnShowAll = browser.find_elements_by_xpath("//button[contains(text(), 'Show All')]")
+            btnShowAll[1].click()
+
+            if callback:
+                result['message'] = 'Reading coupons.'
+                callback(result)
+
+            existingCount = len(browser.find_elements_by_class_name('clipped-coupon-circle'))
+            if callback:
+                result['message'] = str(existingCount) + ' coupons already loaded.'
+                result['existingCount'] = existingCount
+                callback(result)
+
+            # Click all the buttons to add the coupons to your card
+            list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
+
+            for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
+                try:
+                    coupon_button.click()
+
+                    if callback:
+                        result['message'] = 'Added ' + str(count) + ' coupons!'
+                        result['count'] = count
+                        callback(result)
+
+                    time.sleep(.250)
+                except UnexpectedAlertPresentException as e:
+                    print "Dismissing alert " + repr(e)
+                    alert = browser.switch_to_alert()
+                    alert.accept()
+                    continue
+                except Exception as e:
+                    print repr(e)
+                    continue
+
+            if callback:
+                result['message'] = 'Complete!'
+                callback(result)
+
+        result['screenshot'] = browser.get_screenshot_as_base64()
+    except UnexpectedAlertPresentException as e:
+        alert = browser.switch_to_alert()
+        alert.accept()
+    except Exception as e:
+        if callback:
+            result['message'] = 'Error'
+            result['error'] = repr(e)
+            callback(result)
 
     browser.close()
 
