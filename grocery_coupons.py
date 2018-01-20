@@ -76,6 +76,7 @@ def shoprite(email, password, delay = 10, callback = None):
             # Invalid login?
             result['message'] = 'Error'
             result['error'] = 'Invalid login.'
+            result['screenshot'] = browser.get_screenshot_as_base64()
             callback(result)
             count = -1
         else:
@@ -133,11 +134,11 @@ def shoprite(email, password, delay = 10, callback = None):
                     print repr(e)
                     continue
 
+            result['screenshot'] = browser.get_screenshot_as_base64()
+
             if callback:
                 result['message'] = 'Complete!'
                 callback(result)
-
-        result['screenshot'] = browser.get_screenshot_as_base64()
     except UnexpectedAlertPresentException as e:
         alert = browser.switch_to_alert()
         alert.accept()
@@ -145,7 +146,9 @@ def shoprite(email, password, delay = 10, callback = None):
         if callback:
             result['message'] = 'Error'
             result['error'] = repr(e)
-            callback(result)
+            result['screenshot'] = browser.get_screenshot_as_base64()
+            if callback:
+                callback(result)
 
     browser.close()
 
