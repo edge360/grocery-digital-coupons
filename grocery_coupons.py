@@ -76,6 +76,7 @@ def shoprite(email, password, delay = 10, callback = None):
             # Invalid login?
             result['message'] = 'Error'
             result['error'] = 'Invalid login.'
+            result['screenshot'] = browser.get_screenshot_as_base64()
             callback(result)
             count = -1
         else:
@@ -111,32 +112,24 @@ def shoprite(email, password, delay = 10, callback = None):
 
             while len(btnNextDisabled) == 0:
                 try:
-                    if callback:
-                        result['existingCount'] += len(browser.find_elements_by_class_name('clipped-coupon-circle'))
-                        result['message'] = str(result['existingCount']) + ' coupons already clipped.'
-                        callback(result)
-
                     # Click all the buttons to add the coupons to your card
                     list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
 
                     for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
-                        try:
-                            coupon_button.click()
+                        coupon_button.click()
 
-                            if callback:
-                                result['count'] += 1
-                                result['message'] = 'Added ' + str(result['count']) + ' coupons. Page ' + str(page)
-                                callback(result)
+                        if callback:
+                            result['count'] += 1
+                            result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '. Page ' + str(page)
+                            callback(result)
 
-                            time.sleep(.250)
-                        except UnexpectedAlertPresentException as e:
-                            print "Dismissing alert " + repr(e)
-                            alert = browser.switch_to_alert()
-                            alert.accept()
-                            continue
-                        except Exception as e:
-                            print repr(e)
-                            continue
+                        time.sleep(.250)
+
+                    if callback:
+                        result['existingCount'] += len(browser.find_elements_by_class_name('clipped-coupon-circle'))
+                        result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '. Page ' + str(page)
+                        result['screenshot'] = browser.get_screenshot_as_base64()
+                        callback(result)
 
                     # Get the next page.
                     btnNextDisabled = browser.find_elements_by_xpath("//button[contains(@class, 'disabled') and contains(text(), 'Next')]")
@@ -147,7 +140,7 @@ def shoprite(email, password, delay = 10, callback = None):
                         page += 1
 
                         if callback:
-                            result['message'] = 'Added ' + str(result['count']) + ' coupons. Page ' + str(page)
+                            result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '. Page ' + str(page)
                             callback(result)
 
                         time.sleep(0.5)
@@ -163,8 +156,6 @@ def shoprite(email, password, delay = 10, callback = None):
             if callback:
                 result['message'] = 'Complete!'
                 callback(result)
-
-        result['screenshot'] = browser.get_screenshot_as_base64()
     except UnexpectedAlertPresentException as e:
         alert = browser.switch_to_alert()
         alert.accept()
@@ -172,7 +163,9 @@ def shoprite(email, password, delay = 10, callback = None):
         if callback:
             result['message'] = 'Error'
             result['error'] = repr(e)
-            callback(result)
+            result['screenshot'] = browser.get_screenshot_as_base64()
+            if callback:
+                callback(result)
 
     browser.close()
 
