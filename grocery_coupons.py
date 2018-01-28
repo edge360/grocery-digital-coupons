@@ -114,7 +114,6 @@ def shoprite(email, password, delay = 10, callback = None):
                 try:
                     # Click all the buttons to add the coupons to your card
                     list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
-                    list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
 
                     for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
                         coupon_button.click()
