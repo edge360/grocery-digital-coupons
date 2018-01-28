@@ -91,7 +91,7 @@ def shoprite(email, password, delay = 10, callback = None):
             )
 
             if callback:
-                result['message'] = 'Loading all coupons.'
+                result['message'] = 'Loading coupons.'
                 callback(result)
 
             WebDriverWait(browser, delay).until(
@@ -99,32 +99,52 @@ def shoprite(email, password, delay = 10, callback = None):
             )
 
             # Click the link to show all coupons
-            btnShowAll = browser.find_elements_by_xpath("//button[contains(text(), 'Show All')]")
-            btnShowAll[1].click()
+            #btnShowAll = browser.find_elements_by_xpath("//button[contains(text(), 'Show All')]")
+            #btnShowAll[1].click()
 
+            # Read all coupons on the current page, then process all subsequent pages by clicking Next, until no more pages.
             if callback:
                 result['message'] = 'Reading coupons.'
                 callback(result)
 
-            existingCount = len(browser.find_elements_by_class_name('clipped-coupon-circle'))
-            if callback:
-                result['message'] = str(existingCount) + ' coupons already loaded.'
-                result['existingCount'] = existingCount
-                callback(result)
+            btnNextDisabled = ''
+            page = 1
 
-            # Click all the buttons to add the coupons to your card
-            list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
-
-            for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
+            while len(btnNextDisabled) == 0:
                 try:
-                    coupon_button.click()
+                    # Click all the buttons to add the coupons to your card
+                    list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
+                    list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
+
+                    for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
+                        coupon_button.click()
+
+                        if callback:
+                            result['count'] += 1
+                            result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '. Page ' + str(page)
+                            callback(result)
+
+                        time.sleep(.250)
 
                     if callback:
-                        result['message'] = 'Added ' + str(count) + ' coupons!'
-                        result['count'] = count
+                        result['existingCount'] += len(browser.find_elements_by_class_name('clipped-coupon-circle'))
+                        result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '. Page ' + str(page)
+                        result['screenshot'] = browser.get_screenshot_as_base64()
                         callback(result)
 
-                    time.sleep(.250)
+                    # Get the next page.
+                    btnNextDisabled = browser.find_elements_by_xpath("//button[contains(@class, 'disabled') and contains(text(), 'Next')]")
+                    if len(btnNextDisabled) == 0:
+                        btnNext = browser.find_elements_by_xpath("//button[contains(text(), 'Next')]")
+                        btnNext[1].click()
+
+                        page += 1
+
+                        if callback:
+                            result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '. Page ' + str(page)
+                            callback(result)
+
+                        time.sleep(0.5)
                 except UnexpectedAlertPresentException as e:
                     print "Dismissing alert " + repr(e)
                     alert = browser.switch_to_alert()
@@ -133,8 +153,6 @@ def shoprite(email, password, delay = 10, callback = None):
                 except Exception as e:
                     print repr(e)
                     continue
-
-            result['screenshot'] = browser.get_screenshot_as_base64()
 
             if callback:
                 result['message'] = 'Complete!'
