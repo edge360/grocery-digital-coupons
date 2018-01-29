@@ -164,8 +164,7 @@ def shoprite(email, password, delay = 10, callback = None):
             result['message'] = 'Error'
             result['error'] = repr(e)
             result['screenshot'] = browser.get_screenshot_as_base64()
-            if callback:
-                callback(result)
+            callback(result)
 
     browser.close()
 
