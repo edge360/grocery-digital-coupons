@@ -41,7 +41,7 @@ def shoprite(email, password, delay = 10, callback = None):
         callback(result)
 
     try:
-        browser.get('http://plan.shoprite.com/User/Authenticate')
+        browser.get('https://secure.shoprite.com/User/SignIn/3601')
 
         if callback:
             result['message'] = 'Entering login details.'
