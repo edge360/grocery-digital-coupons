@@ -107,10 +107,6 @@ def shoprite(email, password, delay = 10, callback = None):
                 EC.visibility_of_element_located((By.CLASS_NAME, "coupon-item"))
             )
 
-            # Click the link to show all coupons
-            #btnShowAll = browser.find_elements_by_xpath("//button[contains(text(), 'Show All')]")
-            #btnShowAll[1].click()
-
             # Read all coupons on the current page, then process all subsequent pages by clicking Next, until no more pages.
             if callback:
                 result['message'] = 'Reading coupons.'
