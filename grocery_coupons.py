@@ -37,7 +37,7 @@ def shoprite(email, password, delay = 10, callback = None):
     initialize()
 
     if callback:
-        result['message'] = 'Navigating to coupons page.'
+        result['message'] = 'Navigating to home page.'
         callback(result)
 
     try:
