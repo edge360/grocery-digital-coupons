@@ -43,6 +43,17 @@ def shoprite(email, password, delay = 10, callback = None):
     try:
         browser.get('https://www.shoprite.com')
 
+        # Wait for page load.
+        WebDriverWait(browser, delay).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'div.headerSso'))
+        )
+
+        # Sign-out if neccesary.
+        try:
+            browser.find_element_by_class_name('.signouttext').click()
+        except Exception as e:
+            print 'Ignoring sign-out. ' + repr(e)
+
         if callback:
             result['message'] = 'Locating sign-in page.'
             callback(result)
@@ -52,10 +63,7 @@ def shoprite(email, password, delay = 10, callback = None):
             EC.presence_of_element_located((By.ID, 'signinbutton'))
         )
 
-        try:
-        	browser.find_element_by_id('signinbutton').click()
-        except Exception as e:
-            print 'Already signed-in. ' + repr(e)
+        browser.find_element_by_id('signinbutton').click()
 
         if callback:
             result['message'] = 'Entering login details.'
