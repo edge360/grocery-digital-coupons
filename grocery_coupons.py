@@ -37,11 +37,22 @@ def shoprite(email, password, delay = 10, callback = None):
     initialize()
 
     if callback:
-        result['message'] = 'Navigating to login.'
+        result['message'] = 'Navigating to coupons page.'
         callback(result)
 
     try:
-        browser.get('https://secure.shoprite.com/User/SignIn/3601')
+        browser.get('https://www.shoprite.com')
+
+        if callback:
+            result['message'] = 'Locating sign-in page.'
+            callback(result)
+
+        # Wait for signin link.
+        WebDriverWait(browser, delay).until(
+            EC.presence_of_element_located((By.ID, 'signinbutton'))
+        )
+
+        browser.find_element_by_id('signinbutton').click()
 
         if callback:
             result['message'] = 'Entering login details.'
@@ -63,7 +74,7 @@ def shoprite(email, password, delay = 10, callback = None):
 
         # Wait until the site loads, find the welcome page or error message.
         WebDriverWait(browser, delay).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, '.headerSso__welcome, .field-validation-error, .validation-summary-errors'))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '.main-menu-myaccount, .field-validation-error, .validation-summary-errors'))
         )
 
         if callback:
@@ -85,6 +96,19 @@ def shoprite(email, password, delay = 10, callback = None):
                 callback(result)
 
             browser.get('http://coupons.shoprite.com')
+
+            # Click the sign-in button again, if it's there.
+            try:
+                WebDriverWait(browser, delay).until(
+                    EC.visibility_of_element_located((By.CSS_SELECTOR, 'button.menuItem__button'))
+                )
+
+                signInButtons = browser.find_elements_by_css_selector("button.menuItem__button")
+                if len(signInButtons) > 0:
+                    print 'Clicking additional sign-in.'
+                    signInButtons[0].click()
+            except Exception as e:
+                print 'Ignoring additional sign-in. ' + repr(e)
 
             WebDriverWait(browser, delay).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, '#coupon-center-title'))
