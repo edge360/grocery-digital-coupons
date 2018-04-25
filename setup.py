@@ -1,4 +1,5 @@
 import pip
+import sys
 
 def import_or_install(package):
     try:
