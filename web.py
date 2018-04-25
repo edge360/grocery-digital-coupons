@@ -20,6 +20,7 @@ sslify = SSLify(app)
 data = {} # In-memory session.
 
 secret = 'x0Wm5hfk78cBaG2MkM1d' # Token secret key.
+version = 2.3
 
 @app.before_request
 def before_request():
@@ -76,7 +77,7 @@ def coupons():
     if not g.error:
         payload = g.payload
         username = payload['username']
-        
+
         password = data[username]['password'] if username in data else None
 
         # Collect coupons.
@@ -85,7 +86,7 @@ def coupons():
     else:
         error = 'Invalid token.'
         message = str(g.exception)
-    
+
     return apiResult('Running', error, message, noData)
 
 @app.route('/api/status')
@@ -136,11 +137,11 @@ def delete():
 
 @app.route('/login')
 def loginView():
-    return render_template('login.html')
+    return render_template('login.html', version=version)
 
 @app.route('/')
 def index():
-    return render_template('index.html') if not g.error else redirect('/login')
+    return render_template('index.html', version=version) if not g.error else redirect('/login')
 
 def onCollect(username, password):
     error = None

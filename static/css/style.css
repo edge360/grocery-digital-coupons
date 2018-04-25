@@ -46,3 +46,7 @@ body {
 .status {
   text-transform: capitalize;
 }
+
+#version {
+  font-size: 10px;
+}
