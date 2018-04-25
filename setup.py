@@ -1,4 +1,5 @@
 import pip
+import sys
 
 def import_or_install(package):
     try:
@@ -18,8 +19,12 @@ import sys
 from sys import platform
 
 if __name__ == "__main__":
+    # Determine the latest release version.
+    latest_release_url = 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE'
+    version = get(latest_release_url).content
+
     filename = 'chromedriver'
-    url = 'https://chromedriver.storage.googleapis.com/2.33/chromedriver_'
+    url = 'https://chromedriver.storage.googleapis.com/' + version + '/chromedriver_'
     is_64bits = sys.maxsize > 2**32
 
     if platform == "linux" or platform == "linux2":
@@ -33,10 +38,10 @@ if __name__ == "__main__":
         # Windows...
         url += 'win32'
         filename += '.exe'
-    
+
     url += '.zip'
 
-    if not os.path.isfile(filename):
+    if not os.path.isfile(filename) or (len(sys.argv) > 1 and sys.argv[1] == '-update'):
         downloadFilename = url.split('/')[-1]
 
         print 'Downloading ' + downloadFilename + ' from ' + url
