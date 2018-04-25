@@ -74,7 +74,7 @@ def shoprite(email, password, delay = 10, callback = None):
 
         # Wait until the site loads, find the welcome page or error message.
         WebDriverWait(browser, delay).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, '.already-clipped, .field-validation-error, .validation-summary-errors'))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, '.coupon-savings-count, .field-validation-error, .validation-summary-errors'))
         )
 
         if callback:
