@@ -52,7 +52,10 @@ def shoprite(email, password, delay = 10, callback = None):
             EC.presence_of_element_located((By.ID, 'signinbutton'))
         )
 
-        browser.find_element_by_id('signinbutton').click()
+        try:
+        	browser.find_element_by_id('signinbutton').click()
+        except Exception as e:
+            print 'Already signed-in. ' + repr(e)
 
         if callback:
             result['message'] = 'Entering login details.'
