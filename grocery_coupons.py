@@ -114,9 +114,12 @@ def shoprite(email, password, delay = 10, callback = None):
 
             btnNextDisabled = ''
             page = 1
+            loopCount = 0
 
-            while len(btnNextDisabled) == 0:
+            while len(btnNextDisabled) == 0 and loopCount < 50:
                 try:
+                    loopCount = loopCount + 1
+                    
                     # Click all the buttons to add the coupons to your card
                     list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
 
