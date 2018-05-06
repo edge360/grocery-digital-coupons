@@ -140,25 +140,26 @@ def shoprite(email, password, delay = 10, callback = None):
                         callback(result)
 
                     # Get the next page.
-                    btnNextDisabled = browser.find_elements_by_xpath("//button[contains(@class, 'disabled') and contains(text(), 'Next')]")
+                    btnNextDisabled = browser.find_elements_by_xpath("//div[contains(@class, 'coupon-app')]/descendant::button[contains(text(), 'Next') and contains(@class, 'disabled')]")
                     if len(btnNextDisabled) == 0:
-                        btnNext = browser.find_elements_by_xpath("//button[contains(text(), 'Next')]")
-                        btnNext[1].click()
+                        btnNext = browser.find_elements_by_xpath("//div[contains(@class, 'coupon-app')]/descendant::button[contains(text(), 'Next')]")
+                        if len(btnNext) > 0:
+                            btnNext[1].click()
 
-                        page += 1
+                            page += 1
 
-                        if callback:
-                            result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '. Page ' + str(page)
-                            callback(result)
+                            if callback:
+                                result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '. Page ' + str(page)
+                                callback(result)
 
-                        time.sleep(0.5)
+                            time.sleep(0.5)
                 except UnexpectedAlertPresentException as e:
                     print "Dismissing alert " + repr(e)
                     alert = browser.switch_to_alert()
                     alert.accept()
                     continue
                 except Exception as e:
-                    print repr(e)
+                    print e
                     continue
 
             if callback:
