@@ -116,6 +116,8 @@ def shoprite(email, password, delay = 10, callback = None):
                 btnShowAll = browser.find_elements_by_xpath("//div[contains(@class, 'coupon-app')]/descendant::button[contains(text(), 'Show All')]")
                 if len(btnShowAll) > 0:
                     btnShowAll[1].click()
+
+                result['existingCount'] = len(browser.find_elements_by_class_name('clipped-coupon-circle'))
                 
                 # Click all the buttons to add the coupons to your card
                 list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
@@ -126,7 +128,6 @@ def shoprite(email, password, delay = 10, callback = None):
                     if callback:
                         result['count'] += 1
                         result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '.'
-                        result['existingCount'] += len(browser.find_elements_by_class_name('clipped-coupon-circle'))
                         callback(result)
 
                     time.sleep(.250)
