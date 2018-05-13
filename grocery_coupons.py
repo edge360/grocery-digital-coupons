@@ -112,55 +112,34 @@ def shoprite(email, password, delay = 10, callback = None):
                 result['message'] = 'Reading coupons.'
                 callback(result)
 
-            btnNextDisabled = ''
-            page = 1
-            loopCount = 0
+            try:
+                btnShowAll = browser.find_elements_by_xpath("//div[contains(@class, 'coupon-app')]/descendant::button[contains(text(), 'Show All')]")
+                if len(btnShowAll) > 0:
+                    btnShowAll[1].click()
+                
+                # Click all the buttons to add the coupons to your card
+                list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
 
-            while len(btnNextDisabled) == 0 and loopCount < 50:
-                try:
-                    loopCount = loopCount + 1
-                    
-                    # Click all the buttons to add the coupons to your card
-                    list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
-
-                    for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
-                        coupon_button.click()
-
-                        if callback:
-                            result['count'] += 1
-                            result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '. Page ' + str(page)
-                            callback(result)
-
-                        time.sleep(.250)
+                for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
+                    coupon_button.click()
 
                     if callback:
+                        result['count'] += 1
+                        result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '.'
                         result['existingCount'] += len(browser.find_elements_by_class_name('clipped-coupon-circle'))
-                        result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '. Page ' + str(page)
-                        result['screenshot'] = browser.get_screenshot_as_base64()
                         callback(result)
 
-                    # Get the next page.
-                    btnNextDisabled = browser.find_elements_by_xpath("//div[contains(@class, 'coupon-app')]/descendant::button[contains(text(), 'Next') and contains(@class, 'disabled')]")
-                    if len(btnNextDisabled) == 0:
-                        btnNext = browser.find_elements_by_xpath("//div[contains(@class, 'coupon-app')]/descendant::button[contains(text(), 'Next')]")
-                        if len(btnNext) > 0:
-                            btnNext[1].click()
+                    time.sleep(.250)
 
-                            page += 1
-
-                            if callback:
-                                result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '. Page ' + str(page)
-                                callback(result)
-
-                            time.sleep(0.5)
-                except UnexpectedAlertPresentException as e:
-                    print "Dismissing alert " + repr(e)
-                    alert = browser.switch_to_alert()
-                    alert.accept()
-                    continue
-                except Exception as e:
-                    print e
-                    continue
+                if callback:
+                    result['screenshot'] = browser.get_screenshot_as_base64()
+                    callback(result)
+            except UnexpectedAlertPresentException as e:
+                print "Dismissing alert " + repr(e)
+                alert = browser.switch_to_alert()
+                alert.accept()
+            except Exception as e:
+                print e
 
             if callback:
                 result['message'] = 'Complete!'
