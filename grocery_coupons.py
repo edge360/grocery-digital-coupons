@@ -70,6 +70,7 @@ def shoprite(email, password, delay = 10, callback = None):
 
         if callback:
             result['message'] = 'Signing in.'
+            result['screenshot'] = browser.get_screenshot_as_base64()
             callback(result)
 
         # Wait until the site loads, find the welcome page or error message.
@@ -101,6 +102,7 @@ def shoprite(email, password, delay = 10, callback = None):
 
             if callback:
                 result['message'] = 'Loading coupons.'
+                result['screenshot'] = browser.get_screenshot_as_base64()
                 callback(result)
 
             WebDriverWait(browser, delay).until(
@@ -118,6 +120,7 @@ def shoprite(email, password, delay = 10, callback = None):
                     btnShowAll[1].click()
 
                 result['existingCount'] = len(browser.find_elements_by_class_name('clipped-coupon-circle'))
+                result['screenshot'] = browser.get_screenshot_as_base64()
                 
                 # Click all the buttons to add the coupons to your card
                 list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
@@ -128,6 +131,8 @@ def shoprite(email, password, delay = 10, callback = None):
                     if callback:
                         result['count'] += 1
                         result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '.'
+                        if count % 10 == 0:
+                            result['screenshot'] = browser.get_screenshot_as_base64()
                         callback(result)
 
                     time.sleep(.250)
