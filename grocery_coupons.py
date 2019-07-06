@@ -16,6 +16,7 @@ def initialize():
 
     options = webdriver.ChromeOptions()
     options.binary_location = path
+    options.add_experimental_option('w3c', False)
     if path:
         options.add_argument('headless')
 
@@ -47,10 +48,18 @@ def shoprite(email, password, delay = 10, callback = None):
             result['message'] = 'Locating sign-in page.'
             callback(result)
 
-        # Wait for page load.
-        WebDriverWait(browser, delay).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'a.login-to-load'))
-        )
+        for i in range(3):
+            try:
+                # Wait for page load.
+                WebDriverWait(browser, delay).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, 'a.login-to-load'))
+                )
+                break
+            except Exception as e:
+                result['message'] = 'Unable to load sign-in page, reloading page. Attempt ' + str(i+1) + '/3.'
+                result['screenshot'] = browser.get_screenshot_as_base64()
+                callback(result)
+                browser.refresh()
 
         browser.find_elements_by_css_selector('a.login-to-load')[0].click()
 
@@ -86,7 +95,7 @@ def shoprite(email, password, delay = 10, callback = None):
         fields = browser.find_elements_by_xpath("//*[contains(text(), 'incorrect') or contains(text(), 'try again')]")
         if len(fields) > 0:
             # Invalid login?
-            result['message'] = 'Error'
+            result['message'] = 'Error during sign-in.'
             result['error'] = 'Invalid login.'
             result['screenshot'] = browser.get_screenshot_as_base64()
             callback(result)
@@ -117,11 +126,11 @@ def shoprite(email, password, delay = 10, callback = None):
             try:
                 btnShowAll = browser.find_elements_by_xpath("//div[contains(@class, 'coupon-app')]/descendant::button[contains(text(), 'Show All')]")
                 if len(btnShowAll) > 0:
-                    btnShowAll[1].click()
+                    btnShowAll[0].click()
 
                 result['existingCount'] = len(browser.find_elements_by_class_name('clipped-coupon-circle'))
                 result['screenshot'] = browser.get_screenshot_as_base64()
-                
+
                 # Click all the buttons to add the coupons to your card
                 list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
 
@@ -155,6 +164,7 @@ def shoprite(email, password, delay = 10, callback = None):
         alert.accept()
     except Exception as e:
         if callback:
+            print e
             result['message'] = 'Error'
             result['error'] = repr(e)
             result['screenshot'] = browser.get_screenshot_as_base64()
