@@ -95,7 +95,7 @@ def shoprite(email, password, delay = 10, callback = None):
         fields = browser.find_elements_by_xpath("//*[contains(text(), 'incorrect') or contains(text(), 'try again')]")
         if len(fields) > 0:
             # Invalid login?
-            result['message'] = 'Error during sign-in.'
+            result['message'] = 'Error'
             result['error'] = 'Invalid login.'
             result['screenshot'] = browser.get_screenshot_as_base64()
             callback(result)
