@@ -15,7 +15,7 @@ Also available as a [web app](https://github.com/primaryobjects/grocery-digital-
 
 The script only supports [Shoprite](http://www.shoprite.com) and [Stop and Shop](http://www.stopandshop.com/) for now:
 
-1. `python client`.py shoprite`
+1. `python client.py shoprite`
 2. `python client.py shop_and_shop`
 
 ## Dependencies
