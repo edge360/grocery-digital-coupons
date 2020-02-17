@@ -137,6 +137,32 @@ def shoprite(email, password, delay = 10, callback = None):
                 for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
                     coupon_button.click()
 
+                    # Check for a modal notice dialog.
+                    modals = browser.find_elements_by_class_name('modal-dialog')
+                    if modals:
+                        modal = modals[0]
+
+                        # Find the dialog title.
+                        titles = modal.find_elements_by_class_name('modal-title')
+                        titleText = titles[0].text if titles else ''
+
+                        bodies = modal.find_elements_by_class_name('modal-body')
+                        bodyText = bodies[0].text if bodies else ''
+
+                        if callback:
+                            result['message'] = 'Found dialog "' + titleText + '": ' + bodyText
+                            callback(result)
+
+                            # Try to find the 'OK' button, otherwise click the first button found.
+                            buttons = modal.find_elements_by_xpath("button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'ok')]")
+                            if not buttons:
+                                # Just find the first button.
+                                buttons = modal.find_elements_by_class_name('btn')
+
+                            if buttons:
+                                # Click the button to accept the dialog.
+                                buttons[0].click()
+
                     if callback:
                         result['count'] += 1
                         result['message'] = 'Added ' + str(result['count']) + '. Already clipped ' + str(result['existingCount']) + '.'
