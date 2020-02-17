@@ -13,8 +13,8 @@
 
 The script only supports [Shoprite](http://www.shoprite.com) and [Stop and Shop](http://www.stopandshop.com/) for now:
 
-1. `python grocery_coupons.py shoprite`
-2. `python grocery_coupons.py shop_and_shop`
+1. `python client.py shoprite`
+2. `python client.py shop_and_shop`
 
 ## Dependencies
 - [Selenium](http://selenium-python.readthedocs.io/index.html)
@@ -27,7 +27,7 @@ The script only supports [Shoprite](http://www.shoprite.com) and [Stop and Shop]
 1. In Heroku, the set environment config variable `WEB_CONCURRENCY` to `1`. Alternatively, edit [Procfile](https://github.com/primaryobjects/grocery-digital-coupons/blob/web/Procfile) and set the line to `web: gunicorn web:app --workers 1 --log-file -`
 
 2. Enable session affinity: `heroku features:enable http-session-affinity`
-  
+
 ## More Info
 
 ### What are grocery digital coupons?
@@ -51,8 +51,8 @@ The file `config_example.ini` contains an example of how to set up the config fi
 ### How do I launch the script?
 Launch it with an argument for the store you want to access. Right now the two options are:
 
-1. `python grocery_coupons.py shoprite`
-2. `python grocery_coupons.py shop_and_shop`
+1. `python client.py shoprite`
+2. `python client.py shop_and_shop`
 
 
 ## What's next?
