@@ -7,7 +7,7 @@ Also available as a [web app](https://github.com/primaryobjects/grocery-digital-
 1. Install the required software for [Python](https://www.python.org/downloads/) *(version 2.7)*.
 2. Download the [pip](https://bootstrap.pypa.io/get-pip.py) script and install it with `python get-pip.py`
 3. Edit `config.ini` to include your login information.
-4. Run the script with `python grocery_coupons.py shoprite`
+4. Run the script with `python client.py shoprite`
 
 *If on Linux, set the permissions of `chromedriver` to executable.*
 
@@ -15,8 +15,8 @@ Also available as a [web app](https://github.com/primaryobjects/grocery-digital-
 
 The script only supports [Shoprite](http://www.shoprite.com) and [Stop and Shop](http://www.stopandshop.com/) for now:
 
-1. `python grocery_coupons.py shoprite`
-2. `python grocery_coupons.py shop_and_shop`
+1. `python client`.py shoprite`
+2. `python client.py shop_and_shop`
 
 ## Dependencies
 [Selenium](http://selenium-python.readthedocs.io/index.html)
@@ -45,8 +45,8 @@ The file `config_example.ini` contains an example of how to set up the config fi
 ### How do I launch the script?
 Launch it with an argument for the store you want to access. Right now the two options are:
 
-1. `python grocery_coupons.py shoprite`
-2. `python grocery_coupons.py shop_and_shop`
+1. `python client.py shoprite`
+2. `python client.py shop_and_shop`
 
 
 ## What's next?
