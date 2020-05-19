@@ -180,7 +180,7 @@ def onStatus(status):
             data[username]['endDate'] = datetime.now()
             data[username]['error'] = status['error'] if 'error' in status else None
 
-    print status['message']
+    print(status['message'])
 
 def apiResult(payload, error, message, noData):
     if type(payload) is str:
