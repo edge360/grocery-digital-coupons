@@ -5,12 +5,12 @@ subprocess.call(['python', 'setup.py'])
 import sys
 import os
 import grocery_coupons
-from ConfigParser import RawConfigParser
+from configparser import RawConfigParser
 
 def onStatus(status):
-    print status['message']
+    print(status['message'])
     if 'error' in status:
-        print status['error']
+        print(status['error'])
 
 if __name__ == "__main__":
     parser = RawConfigParser()
@@ -27,6 +27,6 @@ if __name__ == "__main__":
         elif sys.argv[1] == 'stop_and_shop':
             grocery_coupons.stop_and_shop(email, password, delay, onStatus)
         else:
-            print 'Unknown site [' + sys.argv[1] + ']'
+            print('Unknown site [' + sys.argv[1] + ']')
     else:
-        print 'Usage: client.py [shoprite | stop_and_shop]'
+        print('Usage: client.py [shoprite | stop_and_shop]')
