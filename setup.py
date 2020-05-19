@@ -1,11 +1,11 @@
 import pip
-import sys
+from pip._internal import main as pipmain
 
 def import_or_install(package):
     try:
         __import__(package)
     except ImportError:
-        pip.main(['install', package])
+        pipmain(['install', package])
 
 # Install required dependencies.
 import_or_install('requests')
@@ -24,7 +24,9 @@ from sys import platform
 if __name__ == "__main__":
     # Determine the latest release version.
     latest_release_url = 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE'
-    version = get(latest_release_url).content
+    version = get(latest_release_url).content.decode('utf-8')
+
+    print('Latest version of Chrome: ' + version)
 
     filename = 'chromedriver'
     url = 'https://chromedriver.storage.googleapis.com/' + version + '/chromedriver_'
@@ -47,13 +49,13 @@ if __name__ == "__main__":
     if not os.path.isfile(filename) or (len(sys.argv) > 1 and sys.argv[1] == '-update'):
         downloadFilename = url.split('/')[-1]
 
-        print 'Downloading ' + downloadFilename + ' from ' + url
+        print('Downloading ' + downloadFilename + ' from ' + url)
 
         request = get(url)
 
-        print 'Unzipping ' + downloadFilename
+        print('Unzipping ' + downloadFilename)
 
         zip_file = ZipFile(BytesIO(request.content))
         zip_file.extractall()
 
-    print 'Done!'
+    print('Done!')

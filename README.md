@@ -2,12 +2,13 @@
 
 ## Quick Start
 
-1. Install the required software for [Python](https://www.python.org/downloads/) *(version 2.7)*.
+1. Install the required software for [Python](https://www.python.org/downloads/) *(version 3.8.3)*.
 2. Download the [pip](https://bootstrap.pypa.io/get-pip.py) script and install it with `python get-pip.py`
 3. Run the setup script `python setup.py`
 4. Run the web app with `python web.py`
 
-*If on Linux, set the permissions of `chromedriver` to executable.*
+- *If on Linux, set the permissions of `chromedriver` to executable.*
+- *In Windows 10, use an Administrator Command Prompt to run scripts.*
 
 ## Usage
 
@@ -19,6 +20,13 @@ The script only supports [Shoprite](http://www.shoprite.com) and [Stop and Shop]
 ## Dependencies
 - [Selenium](http://selenium-python.readthedocs.io/index.html)
 - [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+
+**Helpful Commands**
+
+```bash
+C:\Users\YOUR_USER_NAME\AppData\Local\Programs\Python\Python38-32\python -m pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org --upgrade pip
+C:\Users\YOUR_USER_NAME\AppData\Local\Programs\Python\Python38-32\python client.py
+```
 
 ## Hosting on Heroku
 
