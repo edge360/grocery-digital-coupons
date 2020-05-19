@@ -22,7 +22,7 @@ def initialize():
 
     browser = webdriver.Chrome(executable_path='chromedriver', chrome_options = options)
 
-    print 'Using ' + (path or './chromedriver')
+    print('Using ' + (path or './chromedriver'))
 
 def test(email, password, delay = 10, callback = None):
     result = { 'email': email, 'existingCount': 0, 'count': 0, 'message': None, 'screenshot': None }
@@ -106,7 +106,7 @@ def shoprite(email, password, delay = 10, callback = None):
                 callback(result)
 
             WebDriverWait(browser, delay).until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, '#coupon-center-title'))
+                EC.visibility_of_element_located((By.CSS_SELECTOR, '.coupon-item-container'))
             )
 
             if callback:
@@ -176,11 +176,11 @@ def shoprite(email, password, delay = 10, callback = None):
                     result['screenshot'] = browser.get_screenshot_as_base64()
                     callback(result)
             except UnexpectedAlertPresentException as e:
-                print "Dismissing alert " + repr(e)
+                print("Dismissing alert " + repr(e))
                 alert = browser.switch_to_alert()
                 alert.accept()
             except Exception as e:
-                print e
+                print(e)
 
             if callback:
                 result['message'] = 'Complete!'
@@ -190,7 +190,7 @@ def shoprite(email, password, delay = 10, callback = None):
         alert.accept()
     except Exception as e:
         if callback:
-            print e
+            print(e)
             result['message'] = 'Error'
             result['error'] = repr(e)
             result['screenshot'] = browser.get_screenshot_as_base64()
