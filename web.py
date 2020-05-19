@@ -20,7 +20,7 @@ sslify = SSLify(app)
 data = {} # In-memory session.
 
 secret = 'x0Wm5hfk78cBaG2MkM1d' # Token secret key.
-version = 2.9
+version = 2.91
 
 @app.before_request
 def before_request():
