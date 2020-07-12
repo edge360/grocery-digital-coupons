@@ -16,6 +16,7 @@ def initialize():
 
     options = webdriver.ChromeOptions()
     options.binary_location = path
+    options.add_argument('user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4103.88 Mobile/15E148 Safari/604.1')
     options.add_experimental_option('w3c', False)
     if path:
         options.add_argument('headless')
@@ -64,13 +65,20 @@ def shoprite(email, password, delay = 10, callback = None):
         browser.find_elements_by_css_selector('a.login-to-load')[0].click()
 
         if callback:
-            result['message'] = 'Entering login details.'
+            result['message'] = 'Waiting for login page.'
             callback(result)
 
+        # A redirect to a waiting page may occur here, so give a delay before we look for the login form.
+        time.sleep(5)
+
         # Login
-        WebDriverWait(browser, delay).until(
+        WebDriverWait(browser, 60).until(
             EC.presence_of_element_located((By.ID, "Email"))
         )
+
+        if callback:
+            result['message'] = 'Entering login details.'
+            callback(result)
 
         # Send login info.
         browser.find_element_by_id('Email').send_keys(email)
