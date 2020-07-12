@@ -21,7 +21,7 @@ def initialize():
     if path:
         options.add_argument('headless')
 
-    browser = webdriver.Chrome(executable_path='chromedriver', chrome_options = options)
+    browser = webdriver.Chrome(executable_path='./chromedriver', chrome_options = options)
 
     print('Using ' + (path or './chromedriver'))
 
