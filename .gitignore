@@ -1,2 +1,4 @@
+*.pyc
+*.exe
 chromedriver
 config.ini
