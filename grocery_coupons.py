@@ -20,9 +20,10 @@ def initialize():
     if path:
         options.add_argument('headless')
 
-    browser = webdriver.Chrome(executable_path='chromedriver', chrome_options = options)
+    executable_path = 'chromedriver' if 'DYNO' in os.environ else './chromedriver'
+    browser = webdriver.Chrome(executable_path=executable_path, chrome_options = options)
 
-    print('Using ' + (path or './chromedriver'))
+    print('Using ' + (path or executable_path))
 
 def test(email, password, delay = 10, callback = None):
     result = { 'email': email, 'existingCount': 0, 'count': 0, 'message': None, 'screenshot': None }
