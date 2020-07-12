@@ -65,11 +65,17 @@ def shoprite(email, password, delay = 10, callback = None):
         browser.find_elements_by_css_selector('a.login-to-load')[0].click()
 
         if callback:
-            result['message'] = 'Waiting for login page.'
+            result['message'] = 'Pausing for login page.'
+            result['screenshot'] = browser.get_screenshot_as_base64()
             callback(result)
 
         # A redirect to a waiting page may occur here, so give a delay before we look for the login form.
         time.sleep(5)
+
+        if callback:
+            result['message'] = 'Waiting for login page.'
+            result['screenshot'] = browser.get_screenshot_as_base64()
+            callback(result)
 
         # Login
         WebDriverWait(browser, 60).until(
