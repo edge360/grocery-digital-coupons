@@ -1,3 +1,5 @@
 *.pyc
 *.exe
 *.log
+chromedriver
+config.ini
