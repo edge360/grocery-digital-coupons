@@ -17,8 +17,8 @@ def initialize():
     options = webdriver.ChromeOptions()
     options.binary_location = path
     options.add_experimental_option('w3c', False)
-    if path:
-        options.add_argument('headless')
+    #if path:
+    #    options.add_argument('headless')
 
     executable_path = 'chromedriver' if 'DYNO' in os.environ else './chromedriver'
     browser = webdriver.Chrome(executable_path=executable_path, chrome_options = options)
