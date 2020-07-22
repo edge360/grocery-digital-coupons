@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "client.py",
             "console": "integratedTerminal",
-            "args": ["shoprite"]
+            "args": ["--s", "shoprite"]
         }
     ]
 }
