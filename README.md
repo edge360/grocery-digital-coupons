@@ -16,8 +16,25 @@ Also available as a [web app](https://github.com/primaryobjects/grocery-digital-
 
 The script only supports [Shoprite](http://www.shoprite.com) and [Stop and Shop](http://www.stopandshop.com/) for now:
 
-1. `python client.py shoprite`
-2. `python client.py shop_and_shop`
+1. `python3 client.py`
+2. `python3 client.py --store shoprite --user username --password password`
+
+The full command-line arguments are shown below.
+
+```text
+usage: client.py [-h] [--config CONFIG] [--store [STORE]] [--user [USER]]
+                 [--password [PASSWORD]]
+
+Grocery Digital Coupons.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --config CONFIG       Config section to read login from.
+  --store [STORE]       Store to clip coupons [shoprite, stop_and_shop].
+  --user [USER]         Login username or read from config.ini.
+  --password [PASSWORD]
+                        Login password or read from config.ini.
+```
 
 ## Dependencies
 [Selenium](http://selenium-python.readthedocs.io/index.html)
