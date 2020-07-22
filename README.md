@@ -32,8 +32,7 @@ optional arguments:
   --config CONFIG       Config section to read login from.
   --store [STORE]       Store to clip coupons [shoprite, stop_and_shop].
   --user [USER]         Login username or read from config.ini.
-  --password [PASSWORD]
-                        Login password or read from config.ini.
+  --password [PASSWORD] Login password or read from config.ini.
 ```
 
 ## Dependencies
