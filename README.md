@@ -10,7 +10,7 @@ Also available as a [web app](https://github.com/primaryobjects/grocery-digital-
 4. Run the script with `python client.py shoprite`
 
 - *If on Linux, set the permissions of `chromedriver` to executable.*
-- *In Windows 10, use an Administrator Command Prompt to run scripts.*
+- *In Windows 10, use an Administrator Command Prompt to run scripts. First run `python3 setup.py`*
 
 ## Usage
 

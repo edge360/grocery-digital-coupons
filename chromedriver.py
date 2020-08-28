@@ -27,6 +27,7 @@ def get_driver():
         except SessionNotCreatedException as e:
             if 'This version of ChromeDriver' in e.msg:
                 is_download = True
+                print('Warning: You may need to update the Chrome web browser to the latest version. Run Chrome, click Help->About.')
         except WebDriverException as e:
             if "wrong permissions" in e.msg:
                 st = os.stat('./chromedriver')
