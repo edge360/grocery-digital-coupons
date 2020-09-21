@@ -19,6 +19,7 @@ if __name__ == "__main__":
     arparser.add_argument('--store', type=str, default='shoprite', nargs='?', help='Store to clip coupons [shoprite, stop_and_shop].')
     arparser.add_argument('--user', type=str, nargs='?', help='Login username or read from config.ini.')
     arparser.add_argument('--password', type=str, nargs='?', help='Login password or read from config.ini.')
+    arparser.add_argument('--notify', type=str, default=None, nargs='?', help='Phone number to send a text message summary of results.')
     args = arparser.parse_args()
 
     parser = RawConfigParser()
@@ -27,12 +28,13 @@ if __name__ == "__main__":
     # Get email/password from config file
     email = os.getenv('email') or args.user or parser.get(args.config, 'email')
     password = os.getenv('password') or args.password or parser.get(args.config, 'password')
+    phone = os.getenv('notify') or args.notify or parser.get(args.config, 'notify') if parser.has_option(args.config, 'notify') else None
     delay = 10
 
     if args.store == 'shoprite':
-        grocery_coupons.shoprite(email, password, delay, onStatus)
+        grocery_coupons.shoprite(email, password, phone, delay, onStatus)
     elif args.store == 'stop_and_shop':
-        grocery_coupons.stop_and_shop(email, password, delay, onStatus)
+        grocery_coupons.stop_and_shop(email, password, phone, delay, onStatus)
     elif args.store == 'help':
         print('Usage: client.py [shoprite | stop_and_shop]')
     else:

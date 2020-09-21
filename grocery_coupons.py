@@ -1,5 +1,6 @@
 import os
 import time
+from pytextbelt import Textbelt
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -25,7 +26,7 @@ def initialize():
 
     print('Using ' + (path or executable_path))
 
-def test(email, password, delay = 10, callback = None):
+def test(email, password, phone = None, delay = 10, callback = None):
     result = { 'email': email, 'existingCount': 0, 'count': 0, 'message': None, 'screenshot': None }
 
     if callback:
@@ -33,7 +34,7 @@ def test(email, password, delay = 10, callback = None):
 
     return result
 
-def shoprite(email, password, delay = 10, callback = None):
+def shoprite(email, password, phone = None, delay = 10, callback = None):
     result = { 'email': email, 'existingCount': 0, 'count': 0, 'message': None, 'screenshot': None }
 
     initialize()
@@ -70,7 +71,7 @@ def shoprite(email, password, delay = 10, callback = None):
             callback(result)
 
         # A redirect to a waiting page may occur here, so give a delay before we look for the login form.
-        time.sleep(5)
+        time.sleep(2)
 
         if callback:
             result['message'] = 'Waiting for login page.'
@@ -198,6 +199,10 @@ def shoprite(email, password, delay = 10, callback = None):
 
             if callback:
                 result['message'] = 'Complete!'
+                if phone:
+                    summary = 'Couponfire just clipped ' + str(result['count']) + ' coupons for you! You already had ' + str(result['existingCount']) + '. You now have a total of ' + str(result['count'] + result['existingCount']) + ' coupons.'
+                    recipient = Textbelt.Recipient(phone)
+                    response = recipient.send(summary)
                 callback(result)
     except UnexpectedAlertPresentException as e:
         alert = browser.switch_to_alert()
@@ -214,7 +219,7 @@ def shoprite(email, password, delay = 10, callback = None):
 
     return result
 
-def stop_and_shop(email, password, delay = 10, callback = None, complete = None):
+def stop_and_shop(email, password, phone = None, delay = 10, callback = None, complete = None):
     initialize()
 
     # Get email/password from config file

@@ -28,11 +28,12 @@ usage: client.py [-h] [--config CONFIG] [--store [STORE]] [--user [USER]]
 Grocery Digital Coupons.
 
 optional arguments:
-  -h, --help            show this help message and exit
-  --config CONFIG       Config section to read login from.
-  --store [STORE]       Store to clip coupons [shoprite, stop_and_shop].
-  --user [USER]         Login username or read from config.ini.
-  --password [PASSWORD] Login password or read from config.ini.
+  --help                  Show this help message and exit
+  --config CONFIG         Config section to read login from.
+  --store [STORE]         Store to clip coupons [shoprite, stop_and_shop].
+  --user [USER]           Login username or read from config.ini.
+  --password [PASSWORD]   Login password or read from config.ini.
+  --notify [000-000-0000] Phone number to send a text message summary of results.
 ```
 
 ## Dependencies
