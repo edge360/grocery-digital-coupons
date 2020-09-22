@@ -22,7 +22,7 @@ def initialize():
         options.add_argument('headless')
 
     executable_path = 'chromedriver' if 'DYNO' in os.environ else './chromedriver'
-    browser = webdriver.Chrome(executable_path=executable_path, chrome_options = options)
+    browser = webdriver.Chrome(executable_path=executable_path, options=options)
 
     print('Using ' + (path or executable_path))
 
