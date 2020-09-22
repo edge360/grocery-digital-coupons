@@ -203,6 +203,7 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
                     summary = 'Couponfire clipped ' + str(result['count']) + ' coupons. You now have ' + str(result['count'] + result['existingCount']) + ' total.'
                     recipient = Textbelt.Recipient(phone)
                     response = recipient.send(summary)
+                    print(response)
                 callback(result)
     except UnexpectedAlertPresentException as e:
         alert = browser.switch_to_alert()
