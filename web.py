@@ -20,7 +20,7 @@ sslify = SSLify(app)
 data = {} # In-memory session.
 
 secret = 'x0Wm5hfk78cBaG2MkM1d' # Token secret key.
-version = 2.92
+version = 2.93
 
 @app.before_request
 def before_request():
@@ -151,7 +151,7 @@ def onCollect(username, password):
             if data[username]['status'] != 'RUNNING':
                 # Launch the Selenium coupon collection process asynchronously.
                 data[username]['status'] = 'RUNNING'
-                thread = Thread(target=grocery_coupons.shoprite, args=(username, password, 10, onStatus))
+                thread = Thread(target=grocery_coupons.shoprite, args=(username, password, None, 10, onStatus))
                 thread.start()
             else:
                 error = 'Already running.'

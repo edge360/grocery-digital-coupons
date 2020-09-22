@@ -23,10 +23,11 @@ def get_driver():
         try:
             options = webdriver.ChromeOptions()
             options.add_argument('--headless')
-            driver = webdriver.Chrome(chrome_options=options, executable_path='./chromedriver')
+            driver = webdriver.Chrome(options=options, executable_path='./chromedriver')
         except SessionNotCreatedException as e:
             if 'This version of ChromeDriver' in e.msg:
                 is_download = True
+                print('Warning: You may need to update the Chrome web browser to the latest version. Run Chrome, click Help->About.')
         except WebDriverException as e:
             if "wrong permissions" in e.msg:
                 st = os.stat('./chromedriver')

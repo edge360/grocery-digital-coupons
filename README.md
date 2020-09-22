@@ -8,7 +8,7 @@
 4. Run the web app with `python web.py`
 
 - *If on Linux, set the permissions of `chromedriver` to executable.*
-- *In Windows 10, use an Administrator Command Prompt to run scripts.*
+- *In Windows 10, use an Administrator Command Prompt to run scripts. First run `python3 setup.py`*
 
 ## Usage
 
@@ -26,11 +26,12 @@ usage: client.py [-h] [--config CONFIG] [--store [STORE]] [--user [USER]]
 Grocery Digital Coupons.
 
 optional arguments:
-  -h, --help            show this help message and exit
-  --config CONFIG       Config section to read login from.
-  --store [STORE]       Store to clip coupons [shoprite, stop_and_shop].
-  --user [USER]         Login username or read from config.ini.
-  --password [PASSWORD] Login password or read from config.ini.
+  --help                  Show this help message and exit
+  --config CONFIG         Config section to read login from.
+  --store [STORE]         Store to clip coupons [shoprite, stop_and_shop].
+  --user [USER]           Login username or read from config.ini.
+  --password [PASSWORD]   Login password or read from config.ini.
+  --notify [000-000-0000] Phone number to send a text message summary of results.
 ```
 
 ## Dependencies
@@ -51,6 +52,13 @@ C:\Users\YOUR_USER_NAME\AppData\Local\Programs\Python\Python38-32\python client.
 1. In Heroku, the set environment config variable `WEB_CONCURRENCY` to `1`. Alternatively, edit [Procfile](https://github.com/primaryobjects/grocery-digital-coupons/blob/web/Procfile) and set the line to `web: gunicorn web:app --workers 1 --log-file -`
 
 2. Enable session affinity: `heroku features:enable http-session-affinity`
+
+**Helpful Commands**
+
+```bash
+C:\Users\YOUR_USER_NAME\AppData\Local\Programs\Python\Python38-32\python -m pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org --upgrade pip
+C:\Users\YOUR_USER_NAME\AppData\Local\Programs\Python\Python38-32\python client.py
+```
 
 ## More Info
 
