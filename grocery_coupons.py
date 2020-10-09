@@ -199,7 +199,7 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
 
             if callback:
                 result['message'] = 'Complete!'
-                if phone:
+                if phone and result['count'] > 0:
                     summary = 'Couponfire clipped ' + str(result['count']) + ' coupons. You now have ' + str(result['count'] + result['existingCount']) + ' total.'
                     recipient = Textbelt.Recipient(phone)
                     response = recipient.send(summary)
