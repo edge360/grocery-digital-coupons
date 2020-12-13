@@ -15,7 +15,7 @@
         {
             "name": "Python: Web",
             "type": "python",
-            "pythonPath": "/usr/bin/python2",
+            "python": "/usr/bin/python2",
             "request": "launch",
             "program": "web.py",
             "console": "integratedTerminal"
