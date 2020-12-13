@@ -18,15 +18,15 @@ def initialize():
     options = webdriver.ChromeOptions()
     options.binary_location = path
     options.add_experimental_option('w3c', False)
-    if path:
-        options.add_argument('headless')
+    #if path:
+    #    options.add_argument('headless')
 
     executable_path = 'chromedriver' if 'DYNO' in os.environ else './chromedriver'
-    browser = webdriver.Chrome(executable_path=executable_path, options=options)
+    browser = webdriver.Chrome(executable_path=executable_path, options = options)
 
     print('Using ' + (path or executable_path))
 
-def test(email, password, phone = None, delay = 10, callback = None):
+def test(email, password, delay = 10, callback = None):
     result = { 'email': email, 'existingCount': 0, 'count': 0, 'message': None, 'screenshot': None }
 
     if callback:
@@ -64,14 +64,6 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
                 browser.refresh()
 
         browser.find_elements_by_css_selector('a.login-to-load')[0].click()
-
-        if callback:
-            result['message'] = 'Pausing for login page.'
-            result['screenshot'] = browser.get_screenshot_as_base64()
-            callback(result)
-
-        # A redirect to a waiting page may occur here, so give a delay before we look for the login form.
-        time.sleep(2)
 
         if callback:
             result['message'] = 'Waiting for login page.'
