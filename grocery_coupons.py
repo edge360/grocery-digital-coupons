@@ -71,6 +71,7 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
             callback(result)
 
         # Login
+        time.sleep(2)
         WebDriverWait(browser, 60).until(
             EC.presence_of_element_located((By.ID, "Email"))
         )
@@ -142,8 +143,6 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
                 list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
 
                 for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
-                    coupon_button.click()
-
                     # Check for a modal notice dialog.
                     modals = browser.find_elements_by_class_name('modal-dialog')
                     if modals:
@@ -163,12 +162,17 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
                             # Try to find the 'OK' button, otherwise click the first button found.
                             buttons = modal.find_elements_by_xpath("button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'ok')]")
                             if not buttons:
-                                # Just find the first button.
-                                buttons = modal.find_elements_by_class_name('btn')
+                                buttons = modal.find_elements_by_xpath("//button[contains(text(), 'Close')]")
+                                if not buttons:
+                                    # Just find the first button.
+                                    buttons = modal.find_elements_by_class_name('btn')
 
                             if buttons:
                                 # Click the button to accept the dialog.
                                 buttons[0].click()
+
+                    # Click the "Load to Card" button.
+                    coupon_button.click()
 
                     if callback:
                         result['count'] += 1
