@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from copy import copy
 from threading import Thread
 import grocery_coupons
-from ConfigParser import RawConfigParser
+from configparser import RawConfigParser
 
 app = flask.Flask(__name__)
 sslify = SSLify(app)
@@ -33,7 +33,7 @@ def before_request():
             try:
                 # Set the request context to include the payload from the token.
                 g.payload = jwt.decode(token, secret, algorithms=['HS256'])
-            except Exception, e:
+            except Exception as e:
                 g.error = 'Invalid token.'
                 g.exception = e
         else:
@@ -108,7 +108,7 @@ def status():
 
             error = None if result else 'No data for ' + username
             noData = True if error else False
-        except Exception, e:
+        except Exception as e:
             error = 'Invalid token.'
             message = str(e)
     else:
