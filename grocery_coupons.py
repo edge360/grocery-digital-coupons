@@ -181,7 +181,7 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
                             result['screenshot'] = browser.get_screenshot_as_base64()
                         callback(result)
 
-                    time.sleep(.250)
+                    time.sleep(.5)
 
                 if callback:
                     result['screenshot'] = browser.get_screenshot_as_base64()
