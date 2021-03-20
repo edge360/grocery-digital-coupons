@@ -45,6 +45,7 @@ optional arguments:
 ```bash
 C:\Users\YOUR_USER_NAME\AppData\Local\Programs\Python\Python38-32\python -m pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org --upgrade pip
 C:\Users\YOUR_USER_NAME\AppData\Local\Programs\Python\Python38-32\python client.py
+alias coupons="cd ~/Documents/grocery-digital-coupons && python3 client.py --store shoprite --config shoprite1 && python3 client.py --store shoprite --config shoprite2"
 ```
 
 ## More Info
