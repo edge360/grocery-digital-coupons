@@ -1,6 +1,8 @@
 # Grocery Digital Coupon Automation
 
-Also available as a [web app](https://github.com/primaryobjects/grocery-digital-coupons/tree/web).
+Automatically clip digital coupons on food store web sites!
+
+*Also available as a [web app](https://github.com/primaryobjects/grocery-digital-coupons/tree/web).*
 
 ## Quick Start
 
