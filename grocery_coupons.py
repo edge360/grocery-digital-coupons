@@ -312,7 +312,7 @@ def acme(email, password, phone = None, delay = 10, callback = None):
 
         # Wait until the site loads, find the welcome page or error message.
         WebDriverWait(browser, delay).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, '.grid-coupon-btn'))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, 'button.load-more'))
         )
 
         # Read all coupons on the current page, then process all subsequent pages by clicking Next, until no more pages.
