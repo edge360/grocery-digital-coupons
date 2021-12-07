@@ -7,7 +7,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import UnexpectedAlertPresentException
+from pyvirtualdisplay import Display
 
+display = Display(visible=0, size=(800, 600))
+display.start()
 browser = None
 
 def initialize():
@@ -20,7 +23,10 @@ def initialize():
     #options.add_experimental_option('w3c', False)
     #if path:
     #    options.add_argument('headless')
-
+    options.add_argument("--remote-debugging-port=9222")
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    
     executable_path = 'chromedriver' if 'DYNO' in os.environ else './chromedriver'
     browser = webdriver.Chrome(executable_path=executable_path, options = options)
 
