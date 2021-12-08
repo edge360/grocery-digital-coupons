@@ -20,4 +20,4 @@ RUN pip install requests selenium flask flask_sslify PyJWT pyvirtualdisplay
 
 ADD . /app
 
-ENTRYPOINT ["python", "/app/client.py"]
+ENTRYPOINT ["python", "-u", "/app/client.py"]
