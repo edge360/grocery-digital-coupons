@@ -7,6 +7,7 @@ Automatically clip digital coupons on food store web sites!
 ## Quick Start
 
 `git clone https://github.com/edge360/grocery-digital-coupons.git`
+
 `docker build -t grocery-digital-coupons /opt/grocery-digital-coupons`
 
 Edit `config.ini` to include your login information.
