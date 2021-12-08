@@ -6,13 +6,14 @@ Automatically clip digital coupons on food store web sites!
 
 ## Quick Start
 
-1. Install the required software for [Python](https://www.python.org/downloads/) *(version 3.8.3)*.
-2. Download the [pip](https://bootstrap.pypa.io/get-pip.py) script and install it with `python get-pip.py`
-3. Edit `config.ini` to include your login information.
-4. Run the script with `python client.py shoprite`
+`git clone https://github.com/edge360/grocery-digital-coupons.git`
+`docker build -t grocery-digital-coupons /opt/grocery-digital-coupons`
 
-- *If on Linux, set the permissions of `chromedriver` to executable.*
-- *In Windows 10, use an Administrator Command Prompt to run scripts. First run `python3 setup.py`*
+Edit `config.ini` to include your login information.
+
+`docker run --rm grocery-digital-coupons:latest <arguments>`
+
+Entrypoint: client.py
 
 ## Usage
 
