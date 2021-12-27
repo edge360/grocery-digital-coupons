@@ -1,0 +1,7 @@
+// Workspace settings
+{
+    // The following will hide in the editor
+    "files.exclude": {
+        "**/*.exe": true
+    },
+}
