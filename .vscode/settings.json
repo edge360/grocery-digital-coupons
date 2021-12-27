@@ -2,6 +2,7 @@
 {
     // The following will hide in the editor
     "files.exclude": {
+        "**/__pycache__": true,
         "**/*.exe": true
     },
 }
