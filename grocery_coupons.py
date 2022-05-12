@@ -50,18 +50,10 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
             result['message'] = 'Locating sign-in page.'
             callback(result)
 
-        for i in range(3):
-            try:
-                # Wait for page load.
-                WebDriverWait(browser, delay).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, 'a.login-to-load'))
-                )
-                break
-            except Exception as e:
-                result['message'] = 'Unable to load sign-in page, reloading page. Attempt ' + str(i+1) + '/3.'
-                result['screenshot'] = browser.get_screenshot_as_base64()
-                callback(result)
-                browser.refresh()
+        browser.refresh()
+
+        #browser.switch_to.frame(browser.find_element(By.ID, 'sr-digital-coupons'))
+        WebDriverWait(browser, delay).until(EC.frame_to_be_available_and_switch_to_it((By.ID, "sr-digital-coupons")))
 
         browser.find_elements_by_css_selector('a.login-to-load')[0].click()
 
@@ -89,6 +81,8 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
             result['message'] = 'Signing in.'
             result['screenshot'] = browser.get_screenshot_as_base64()
             callback(result)
+
+        WebDriverWait(browser, delay).until(EC.frame_to_be_available_and_switch_to_it((By.ID, "sr-digital-coupons")))
 
         # Wait until the site loads, find the welcome page or error message.
         WebDriverWait(browser, delay).until(
