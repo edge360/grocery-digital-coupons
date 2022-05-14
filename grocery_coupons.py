@@ -6,7 +6,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import UnexpectedAlertPresentException
+from selenium.common.exceptions import UnexpectedAlertPresentException, ElementClickInterceptedException
 
 browser = None
 
@@ -55,7 +55,11 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
         #browser.switch_to.frame(browser.find_element(By.ID, 'sr-digital-coupons'))
         WebDriverWait(browser, delay).until(EC.frame_to_be_available_and_switch_to_it((By.ID, "sr-digital-coupons")))
 
-        browser.find_elements_by_css_selector('a.login-to-load')[0].click()
+        WebDriverWait(browser, 60).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "a.login-to-load"))
+        )
+
+        browser.find_elements(By.CSS_SELECTOR, "a.login-to-load")[0].click()
 
         if callback:
             result['message'] = 'Waiting for login page.'
@@ -94,7 +98,7 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
             callback(result)
 
         # Check if the login succeeded.
-        fields = browser.find_elements_by_xpath("//*[contains(text(), 'incorrect') or contains(text(), 'try again')]")
+        fields = browser.find_elements(By.XPATH, "//*[contains(text(), 'incorrect') or contains(text(), 'try again')]")
         if len(fields) > 0:
             # Invalid login?
             result['message'] = 'Error'
@@ -126,27 +130,27 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
                 callback(result)
 
             try:
-                btnShowAll = browser.find_elements_by_xpath("//div[contains(@class, 'coupon-app')]/descendant::button[contains(text(), 'Show All')]")
+                btnShowAll = browser.find_elements(By.XPATH, "//div[contains(@class, 'coupon-app')]/descendant::button[contains(text(), 'Show All')]")
                 if len(btnShowAll) > 0:
                     btnShowAll[0].click()
 
-                result['existingCount'] = len(browser.find_elements_by_class_name('clipped-coupon-circle'))
+                result['existingCount'] = len(browser.find_elements(By.CLASS_NAME, 'clipped-coupon-circle'))
                 result['screenshot'] = browser.get_screenshot_as_base64()
 
                 # Click all the buttons to add the coupons to your card
-                list_of_coupon_buttons = browser.find_elements_by_css_selector("a.available-to-clip:not(.ng-hide)")
+                list_of_coupon_buttons = browser.find_elements(By.CSS_SELECTOR, "a.available-to-clip:not(.ng-hide)")
 
                 for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
                     # Check for a modal notice dialog.
-                    modals = browser.find_elements_by_class_name('modal-dialog')
+                    modals = browser.find_elements(By.CLASS_NAME, 'modal-dialog')
                     if modals:
                         modal = modals[0]
 
                         # Find the dialog title.
-                        titles = modal.find_elements_by_class_name('modal-title')
+                        titles = modal.find_elements(By.CLASS_NAME, 'modal-title')
                         titleText = titles[0].text if titles else ''
 
-                        bodies = modal.find_elements_by_class_name('modal-body')
+                        bodies = modal.find_elements(By.CLASS_NAME, 'modal-body')
                         bodyText = bodies[0].text if bodies else ''
 
                         if callback:
@@ -154,12 +158,12 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
                             callback(result)
 
                             # Try to find the 'OK' button, otherwise click the first button found.
-                            buttons = modal.find_elements_by_xpath("button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'ok')]")
+                            buttons = modal.find_elements(By.XPATH, "button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'ok')]")
                             if not buttons:
-                                buttons = modal.find_elements_by_xpath("//button[contains(text(), 'Close')]")
+                                buttons = modal.find_elements(By.XPATH, "//button[contains(text(), 'Close')]")
                                 if not buttons:
                                     # Just find the first button.
-                                    buttons = modal.find_elements_by_class_name('btn')
+                                    buttons = modal.find_elements(By.CLASS_NAME, 'btn')
 
                             if buttons:
                                 # Click the button to accept the dialog.
@@ -184,6 +188,8 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
                 print("Dismissing alert " + repr(e))
                 alert = browser.switch_to_alert()
                 alert.accept()
+            except ElementClickInterceptedException as e:
+                print("Ignoring missed element " + repr(e))
             except Exception as e:
                 print(e)
 
