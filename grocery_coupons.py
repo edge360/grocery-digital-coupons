@@ -86,6 +86,22 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
             result['screenshot'] = browser.get_screenshot_as_base64()
             callback(result)
 
+        # Check for store selection modal.
+        time.sleep(5)
+        modal = browser.find_elements(By.ID, 'modal-content')
+        if modal:
+            # Click the In Store button and the Make My Store button.
+            in_store_icons = modal[0].find_elements(By.XPATH, "//*[contains(text(), 'In Store')]")
+            click_first_interactable_element(in_store_icons)
+            make_buttons = modal[0].find_elements(By.XPATH, "//button[contains(text(), 'Make My Store')]")
+            click_first_interactable_element(make_buttons)
+
+            # Check if we need to click the digital coupons button to get to the page.
+            time.sleep(5)
+            digital_coupons_buttons = browser.find_elements(By.XPATH, "//button[contains(text(), 'Load to Card')]")
+            if digital_coupons_buttons:
+                click_first_interactable_element(digital_coupons_buttons)
+
         WebDriverWait(browser, delay).until(EC.frame_to_be_available_and_switch_to_it((By.ID, "sr-digital-coupons")))
 
         # Wait until the site loads, find the welcome page or error message.
@@ -378,3 +394,14 @@ def acme(email, password, phone = None, delay = 10, callback = None):
     browser.close()
 
     return result
+
+def click_first_interactable_element(elements):
+    for element in elements:
+        if element.is_displayed() and element.is_enabled():
+            try:
+                element.click()
+                return
+            except ElementClickInterceptedException:
+                continue
+
+    raise Exception('No interactable elements found.')
