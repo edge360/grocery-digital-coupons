@@ -2,8 +2,6 @@
 
 Automatically clip digital coupons on food store web sites!
 
-*Also available as a [web app](https://github.com/primaryobjects/grocery-digital-coupons/tree/web).*
-
 ## Quick Start
 
 `git clone https://github.com/edge360/grocery-digital-coupons.git`
@@ -38,18 +36,6 @@ optional arguments:
   --user [USER]           Login username or read from config.ini.
   --password [PASSWORD]   Login password or read from config.ini.
   --notify [000-000-0000] Phone number to send a text message summary of results.
-```
-
-## Dependencies
-[Selenium](http://selenium-python.readthedocs.io/index.html)
-[Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
-
-**Helpful Commands**
-
-```bash
-C:\Users\YOUR_USER_NAME\AppData\Local\Programs\Python\Python38-32\python -m pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org --upgrade pip
-C:\Users\YOUR_USER_NAME\AppData\Local\Programs\Python\Python38-32\python client.py
-alias coupons="cd ~/Documents/grocery-digital-coupons && python3 client.py --store shoprite --config shoprite1 && python3 client.py --store shoprite --config shoprite2"
 ```
 
 ## More Info
