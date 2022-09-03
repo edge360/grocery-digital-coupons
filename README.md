@@ -61,7 +61,3 @@ The file `config_example.ini` contains an example of how to set up the config fi
 ## What's next?
 
 The script supports ShopRite, Acme, and Stop and Shop for now, so the addition of other grocery stories would be great. It appears that [Giant's website](https://giantfoodstores.com/) looks similar to Stop and Shop since they're [owned by the same company](https://en.wikipedia.org/wiki/Stop_%26_Shop/Giant-Landover), so I assume this would be easy to integrate.
-
-## Contact
-
-You can contact the author, Sheil Naik, [on Twitter](http://www.twitter.com/sheilnaik).
