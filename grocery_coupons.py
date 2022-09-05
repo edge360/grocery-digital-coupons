@@ -77,9 +77,9 @@ def shoprite(email, password, phone = None, delay = 10, callback = None):
             callback(result)
 
         # Send login info.
-        browser.find_element_by_id('Email').send_keys(email)
-        browser.find_element_by_id('Password').send_keys(password)
-        browser.find_element_by_id('Password').send_keys(Keys.RETURN)
+        browser.find_elements(By.ID, 'Email')[0].send_keys(email)
+        browser.find_elements(By.ID, 'Password')[0].send_keys(password)
+        browser.find_elements(By.ID, 'Password')[0].send_keys(Keys.RETURN)
 
         if callback:
             result['message'] = 'Signing in.'
@@ -259,7 +259,7 @@ def stop_and_shop(email, password, phone = None, delay = 10, callback = None, co
     )
 
     # Click all the buttons to add the coupons to your card
-    list_of_coupon_buttons = browser.find_elements_by_class_name('load-to-card')
+    list_of_coupon_buttons = browser.find_elements(By.CLASS_NAME, 'load-to-card')
 
     for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
         try:
@@ -309,9 +309,9 @@ def acme(email, password, phone = None, delay = 10, callback = None):
             callback(result)
 
         # Send login info.
-        browser.find_element_by_id('label-email').send_keys(email)
-        browser.find_element_by_id('label-password').send_keys(password)
-        browser.find_element_by_id('label-password').send_keys(Keys.RETURN)
+        browser.find_elements(By.ID, 'label-email')[0].send_keys(email)
+        browser.find_elements(By.ID, 'label-password')[0].send_keys(password)
+        browser.find_elements(By.ID, 'label-password')[0].send_keys(Keys.RETURN)
 
         if callback:
             result['message'] = 'Signing in.'
@@ -329,20 +329,20 @@ def acme(email, password, phone = None, delay = 10, callback = None):
             callback(result)
 
         try:
-            btnLoadMore = browser.find_element_by_css_selector('button.load-more');
+            btnLoadMore = browser.find_elements(By.CSS_SELECTOR, 'button.load-more')[0];
             while btnLoadMore:
                 btnLoadMore.click();
                 time.sleep(1)
                 try:
-                    btnLoadMore = browser.find_element_by_css_selector('button.load-more');
+                    btnLoadMore = browser.find_elements(By.CSS_SELECTOR, 'button.load-more')[0];
                 except:
                     break
 
-            result['existingCount'] = len(browser.find_elements_by_class_name('coupon-clipped-container'))
+            result['existingCount'] = len(browser.find_elements(By.CLASS_NAME, 'coupon-clipped-container'))
             result['screenshot'] = browser.get_screenshot_as_base64()
 
             # Click all the buttons to add the coupons to your card
-            list_of_coupon_buttons = browser.find_elements_by_css_selector("button.grid-coupon-btn")
+            list_of_coupon_buttons = browser.find_elements(By.CSS_SELECTOR, "button.grid-coupon-btn")
 
             for count, coupon_button in enumerate(list_of_coupon_buttons, start=1):
                 try:
