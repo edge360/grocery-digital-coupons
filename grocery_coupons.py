@@ -1,4 +1,3 @@
-#!/bin/python3
 import os
 import time
 import argparse
@@ -126,43 +125,34 @@ def initialize():
     print('Browser initialized')
 
 
-def stop_and_shop(email, password):
-    pass
-
-def acme(email,password):
-    pass
-
-
-
-#def okay():
 if __name__ == '__main__':
     arparser = argparse.ArgumentParser(description='Grocery Digital Coupons.')
-    arparser.add_argument('--config', type=str, default='shoprite', help='Config section to read login from.')
-    arparser.add_argument('--store', type=str, default='shoprite', nargs='?', help='Store to clip coupons [shoprite, acme, stop_and_shop].')
-    arparser.add_argument('--user', type=str, nargs='?', help='Login username or read from config.ini.')
-    arparser.add_argument('--password', type=str, nargs='?', help='Login password or read from config.ini.')
+    arparser.add_argument('--store', type=str, default='shoprite', nargs='?', help='Store to clip coupons [shoprite | pricerite | fairway | dearborn | gourmet | fresh]. Add arg or read from STORE env ')
+    arparser.add_argument('--user', type=str, nargs='?', help='Login username. Add arg  or read from EMAIL env.')
+    arparser.add_argument('--password', type=str, nargs='?', help='Login password. Add arg or read from PASSWORD env.')
     args = arparser.parse_args()
 
-    #all wake fern brands use same login/auth and same coupon db (applicable coupons may differ
+    #all wake fern brands use same login/auth and same coupon db (applicable coupons may differ)
     #shoprite, pricerite, fairway, dearborn market, gourmet garage, fresh grocer
 
     # Get email/password from ENV or cli
     email = os.getenv('EMAIL') or args.user
     password = os.getenv('PASSWORD') or args.password
+    store = os.getenv('STORE') or args.store
 
-    if args.store == 'shoprite':
+    if store == 'shoprite':
         coupons(email, password, 'shoprite')
-    elif args.store == 'pricerite':
+    elif store == 'pricerite':
         coupons(email, password, 'pricerite')
-    elif args.store == 'fairway':
+    elif store == 'fairway':
         coupons(email, password, 'fairway')
-    elif args.store == 'dearborn':
+    elif store == 'dearborn':
         coupons(email, password, 'dearborn')
-    elif args.store == 'gourmet':
+    elif store == 'gourmet':
         coupons(email, password, 'gourment')
-    elif args.store == 'fresh':
+    elif store == 'fresh':
         coupons(email, password, 'fresh')
-    elif args.store == 'help':
+    elif store == 'help':
         print('Usage: grocery_coupons.py [shoprite | pricerite | fairway | dearborn | gourmet | fresh]')
     else:
         print('Unknown store: ' + args.store)
