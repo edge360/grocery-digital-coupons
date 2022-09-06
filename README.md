@@ -15,7 +15,7 @@ The script supports [ShopRite](http://www.shoprite.com), [PriceRite](https://www
 
 Pass arguments via CLI or ENV
 
-`docker run --rm grocery-digital-coupons:latest <arguments>`
+`docker run --rm grocery-digital-coupons:latest --user 'email@gmail.com' --password 'password123' --store 'shoprite'`
 
 `docker run --rm grocery-digital-coupons:latest  --env EMAIL='email@gmail.com' --env PASSWORD='password123' --env STORE='shoprite'`
 
