@@ -12,7 +12,7 @@ Edit `config.ini` to include your login information.
 
 `docker run --rm grocery-digital-coupons:latest <arguments>`
 
-Entrypoint: client.py
+Entrypoint: grocery_coupons.py
 
 ## Usage
 
@@ -35,7 +35,6 @@ optional arguments:
   --store [STORE]         Store to clip coupons [shoprite, acme, stop_and_shop].
   --user [USER]           Login username or read from config.ini.
   --password [PASSWORD]   Login password or read from config.ini.
-  --notify [000-000-0000] Phone number to send a text message summary of results.
 ```
 
 ## More Info
