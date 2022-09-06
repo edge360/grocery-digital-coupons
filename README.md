@@ -2,45 +2,40 @@
 
 Automatically clip digital coupons on food store web sites!
 
+The script supports [ShopRite](http://www.shoprite.com), [PriceRite](https://www.priceritemarketplace.com/), [Fairway](https://www.fairwaymarket.com/). [Dearborn Markets](https://www.dearbornmarket.com/), [Gourmet Garage](https://www.gourmetgarage.com/), and [The Fresh Grocer](https://www.thefreshgrocer.com/).
+
+
 ## Quick Start
 
 `git clone https://github.com/edge360/grocery-digital-coupons.git`
 
 `docker build -t grocery-digital-coupons /opt/grocery-digital-coupons`
 
-Edit `config.ini` to include your login information.
+## Usage
+
+Pass arguments via CLI or ENV
 
 `docker run --rm grocery-digital-coupons:latest <arguments>`
 
-Entrypoint: grocery_coupons.py
-
-## Usage
-
-The script supports [Shoprite](http://www.shoprite.com), [ACME](https://www.acmemarkets.com), and [Stop and Shop](http://www.stopandshop.com/).
-
-1. `python3 client.py`
-2. `python3 client.py --store shoprite --user username --password password`
+`docker run --rm grocery-digital-coupons:latest  --env EMAIL='email@gmail.com' --env PASSWORD='password123' --env STORE='shoprite'`
 
 The full command-line arguments are shown below.
 
 ```text
-usage: client.py [-h] [--config CONFIG] [--store [STORE]] [--user [USER]]
+usage: grocery_coupons.py [-h] [--store [STORE]] [--user [USER]]
                  [--password [PASSWORD]]
-
-Grocery Digital Coupons.
 
 optional arguments:
   --help                  Show this help message and exit
-  --config CONFIG         Config section to read login from.
-  --store [STORE]         Store to clip coupons [shoprite, acme, stop_and_shop].
-  --user [USER]           Login username or read from config.ini.
-  --password [PASSWORD]   Login password or read from config.ini.
+  --store [STORE]         Store to clip coupons [shoprite | pricerite | fairway | dearborn | gourmet | fresh].
+  --user [USER]           Login username or read from ENV.
+  --password [PASSWORD]   Login password or read from ENV.
 ```
 
 ## More Info
 
 ### What are grocery digital coupons?
-My local grocery stores - [ShopRite](http://www.shoprite.com), [ACME](https://www.acmemarkets.com), and [Stop and Shop](http://www.stopandshop.com/) - have a "digital coupon" feature, by which you can log onto their website and add "digital" coupons to your store loyalty card. If you buy a product and the corresponding digital coupon is added to your loyalty card, you'll save some money upon checkout.
+My local grocery stores have a "digital coupon" feature, by which you can log onto their website and add "digital" coupons to your store loyalty card. If you buy a product and the corresponding digital coupon is added to your loyalty card, you'll save some money upon checkout.
 
 ### So what's the problem?
 The problem is that the digital coupons have to be added manually. If you buy something and the coupon isn't present on your loyalty card at the time of checkout, you won't get the discount.
@@ -55,8 +50,8 @@ The script adds *all* digital coupons to your card each week. Then, you'll autom
 The script uses [Selenium](http://selenium-python.readthedocs.io/index.html) to launch the grocery store's website, login with your loyalty card information, and automatically add each available coupon to your card.
 
 ### Where is my login information saved?
-The file `config_example.ini` contains an example of how to set up the config file. This file will need to be renamed `config.ini` in order for the script to work.
+Your login information is passed via command line when you call the script or thru environmental variables set when you run the docker image.
 
 ## What's next?
 
-The script supports ShopRite, Acme, and Stop and Shop for now, so the addition of other grocery stories would be great. It appears that [Giant's website](https://giantfoodstores.com/) looks similar to Stop and Shop since they're [owned by the same company](https://en.wikipedia.org/wiki/Stop_%26_Shop/Giant-Landover), so I assume this would be easy to integrate.
+The script was re-written for Docker support and to target Wakefern brands which include ShopRite, PriceRite, Fairway. Dearborn Markets, Gourmet Garage, and The Fresh Grocer for now. All of these brands appear to utilize the same login/auth and coupon DB in some respect, some coupons may only be available via clipping with certain stores. I would like to expand these at some point to other local stores including ACME/Albertsons, etc... 
