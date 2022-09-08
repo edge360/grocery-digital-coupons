@@ -9,7 +9,7 @@ The script supports [ShopRite](http://www.shoprite.com), [PriceRite](https://www
 
 docker
 
-`git clone https://github.com/edge360/grocery-digital-coupons.git`
+`git clone https://github.com/edge360/grocery-digital-coupons.git /opt/grocery-digital-coupons`
 
 `docker build -t grocery-digital-coupons /opt/grocery-digital-coupons`
 
