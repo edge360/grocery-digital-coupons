@@ -11,13 +11,29 @@ The script supports [ShopRite](http://www.shoprite.com), [PriceRite](https://www
 
 `docker build -t grocery-digital-coupons /opt/grocery-digital-coupons`
 
+docker-compose.yml
+ ```
+ grocery-digital-coupons:
+    image: pointccclx/grocery-digital-coupons:latest
+    container_name: grocery-digital-coupons
+    environment:
+      - EMAIL=email@gmail.com
+      - PASSWORD=password123
+      - STORE=shoprite
+```
+
 ## Usage
 
 Pass arguments via CLI or ENV
 
+docker
 `docker run --rm grocery-digital-coupons:latest --user 'email@gmail.com' --password 'password123' --store 'shoprite'`
 
 `docker run --rm grocery-digital-coupons:latest  --env EMAIL='email@gmail.com' --env PASSWORD='password123' --env STORE='shoprite'`
+
+docker-compose
+
+`docker-compose.yml up grocery-digital-coupons` 
 
 The full command-line arguments are shown below.
 
