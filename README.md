@@ -7,6 +7,8 @@ The script supports [ShopRite](http://www.shoprite.com), [PriceRite](https://www
 
 ## Quick Start
 
+docker
+
 `git clone https://github.com/edge360/grocery-digital-coupons.git`
 
 `docker build -t grocery-digital-coupons /opt/grocery-digital-coupons`
@@ -27,6 +29,7 @@ docker-compose.yml
 Pass arguments via CLI or ENV
 
 docker
+
 `docker run --rm grocery-digital-coupons:latest --user 'email@gmail.com' --password 'password123' --store 'shoprite'`
 
 `docker run --rm grocery-digital-coupons:latest  --env EMAIL='email@gmail.com' --env PASSWORD='password123' --env STORE='shoprite'`
@@ -71,3 +74,7 @@ Your login information is passed via command line when you call the script or th
 ## What's next?
 
 The script was re-written for Docker support and to target Wakefern brands which include ShopRite, PriceRite, Fairway. Dearborn Markets, Gourmet Garage, and The Fresh Grocer for now. All of these brands appear to utilize the same login/auth and coupon DB in some respect, some coupons may only be available via clipping with certain stores. I would like to expand these at some point to other local stores including ACME/Albertsons, etc... 
+
+
+
+Originally forked from - sheilnaik/grocery-digital-coupons & primaryobjects/grocery-digital-coupons
