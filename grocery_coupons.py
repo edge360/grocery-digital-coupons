@@ -106,6 +106,83 @@ def coupons(email, password, store):
         driver.quit()
         display.stop()
 
+        
+        
+        
+        
+def albertsons(email, password, store):
+
+    #initialize browser and virt display
+    initialize()
+
+
+    try:
+
+        print("Loading Page...")
+        driver.get('https://www.acmemarkets.com/foru/coupons-deals.html')
+        wait = WebDriverWait(driver, 60)
+
+
+        print(driver.title)
+        print("Navigating to Login...")
+
+        time.sleep(1)
+
+        print("Logging In...")
+        wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'form-control.sigin-email.body-m'))).send_keys(email)
+        driver.find_element(By.CLASS_NAME,'form-control.sign-in-passwordfield.body-m').send_keys(password)
+        driver.find_element(By.CLASS_NAME, 'form-control.sigin-email.body-m').send_keys(Keys.RETURN)
+
+        time.sleep(5)
+        print(driver.title)
+
+        wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'btn.load-more')))        
+        print("Loading Coupons...")
+        try:
+            while ( load := driver.find_element(By.CLASS_NAME, 'btn.load-more') ):
+                load.click()
+                print("...")
+                time.sleep(3)
+        except:
+            pass
+            print("Loaded coupons")
+
+        clipped_count = 0
+        coupons = driver.find_elements(By.CLASS_NAME, 'col-12.col-sm-12.col-md-6.col-lg-4.coupon-grid-offer')
+        total_count = len(coupons)
+        for coupon in coupons:
+            coupon_name = coupon.find_element(By.CLASS_NAME, 'grid-coupon-description-text-title').text
+            coupon_desc = coupon.find_element(By.CLASS_NAME, 'grid-coupon-heading-offer-price').text
+            try:
+                coupon.find_element(By.CLASS_NAME, 'btn.grid-coupon-btn.btn-default').click()
+                print("Clipped: " + str(coupon_name) + " --- " + str(coupon_desc))
+                clipped_count += 1
+            except:
+                #Already Clipped
+                pass
+
+        if not clipped_count:
+            print("No New Coupons Clipped --- 0/" + str(total_count))
+        else:
+            print("Clipped " + str(clipped_count) + " new coupon(s) --- " + str(clipped_count) + "/" + str(total_count))
+
+
+        driver.close()
+        driver.quit()
+        display.stop()
+
+
+    except Exception as e:
+        #close/quit chrome and stop display on exception
+        print(e)
+        driver.close()
+        driver.quit()
+        display.stop()
+        
+        
+        
+        
+        
 def initialize():
     global driver
     global display
@@ -152,6 +229,8 @@ if __name__ == '__main__':
         coupons(email, password, 'gourment')
     elif store == 'fresh':
         coupons(email, password, 'fresh')
+    elif store == 'acme':
+        albertsons(email, password, 'acme')
     elif store == 'help':
         print('Usage: grocery_coupons.py [shoprite | pricerite | fairway | dearborn | gourmet | fresh]')
     else:
