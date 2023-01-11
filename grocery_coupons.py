@@ -1,6 +1,9 @@
 import os
 import time
 import argparse
+import traceback
+import sys
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -14,7 +17,7 @@ from pyvirtualdisplay.display import Display
 driver = None
 display = None
 
-def coupons(email, password, store):
+def wakefern_coupons(email, password, store):
 
     #initialize browser and virt display
     initialize()
@@ -66,16 +69,21 @@ def coupons(email, password, store):
         try:
             print("Success...")
             wait.until(EC.frame_to_be_available_and_switch_to_it((By.ID, coupon_app)))
+            #iframe = wait(driver).until(EC.presence_of_element_located((
+            #    By.ID, coupon_app)))
+            #driver.switch_to.frame(iframe)
+            print("Switching to iframe...")
         except:
             print("Incorrect email or password")
             return
 
-        #print("Loading All Coupons to page...")
-        wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "btn.btn-default.btn-sm.ng-tns-c98-0.ng-star-inserted"))).click()
-        #print("Clipping  Coupons...")
+        print("Loading All Coupons to page...")
+        wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "btn.btn-default.btn-sm.ng-tns-c38-0.ng-star-inserted"))).click()
+        print("Clipping  Coupons...")
         clipped_count = 0
         coupons = driver.find_elements(By.CLASS_NAME, 'coupon-item-container')
         total_count = len(coupons)
+        #####account for modal diaglogue for super coupon
         for coupon in coupons:
             coupon_name = coupon.find_element(By.CLASS_NAME, 'coupon-brand-name').text
             coupon_desc = coupon.find_element(By.CLASS_NAME, 'coupon-desc').text
@@ -83,6 +91,12 @@ def coupons(email, password, store):
                 coupon.find_element(By.CLASS_NAME, 'available-to-clip.ng-star-inserted').click()
                 print("Clipped: " + str(coupon_name) + " --- " + str(coupon_desc))
                 clipped_count += 1
+                try:
+                    #print("Encountered super coupon dialog... clicking OKAY")
+                    super_coupon_diag = driver.find_element(By.CLASS_NAME, 'btn.btn-outline-dark').click()
+                    print("Clicked OKAY.. next coupon")
+                except:
+                    pass
             except:
                 #Already Clipped
                 pass
@@ -99,18 +113,21 @@ def coupons(email, password, store):
         display.stop()
 
 
+    except:
+        exit_with_failure("store error")
+
+    """
     except Exception as e:
         #close/quit chrome and stop display on exception
         print(e)
         driver.close()
         driver.quit()
         display.stop()
+    """
 
-        
-        
-        
-        
-def albertsons(email, password, store):
+
+
+def albertsons_coupons(email, password, store):
 
     #initialize browser and virt display
     initialize()
@@ -136,7 +153,7 @@ def albertsons(email, password, store):
         time.sleep(5)
         print(driver.title)
 
-        wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'btn.load-more')))        
+        wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'btn.load-more')))
         print("Loading Coupons...")
         try:
             while ( load := driver.find_element(By.CLASS_NAME, 'btn.load-more') ):
@@ -174,15 +191,20 @@ def albertsons(email, password, store):
 
     except Exception as e:
         #close/quit chrome and stop display on exception
+        exit_with_failure("store error")
         print(e)
         driver.close()
         driver.quit()
         display.stop()
-        
-        
-        
-        
-        
+
+def exit_with_failure(message):
+    traceback.print_exc()
+    print_with_timestamp(message)
+    sys.exit(1)
+
+def print_with_timestamp(text):
+    print(f'{datetime.now().strftime("%d/%m/%Y %H:%M:%S")} - {text}')
+
 def initialize():
     global driver
     global display
@@ -196,6 +218,7 @@ def initialize():
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('window-size=1200x1000')
     options.add_argument('start-maximized')
+    options.add_argument('--no-sandbox')
 
     driver = webdriver.Chrome(options=options)
 
@@ -203,6 +226,7 @@ def initialize():
 
 
 if __name__ == '__main__':
+
     arparser = argparse.ArgumentParser(description='Grocery Digital Coupons.')
     arparser.add_argument('--store', type=str, default='shoprite', nargs='?', help='Store to clip coupons [shoprite | pricerite | fairway | dearborn | gourmet | fresh]. Add arg or read from STORE env ')
     arparser.add_argument('--user', type=str, nargs='?', help='Login username. Add arg  or read from EMAIL env.')
@@ -218,20 +242,29 @@ if __name__ == '__main__':
     store = os.getenv('STORE') or args.store
 
     if store == 'shoprite':
-        coupons(email, password, 'shoprite')
+        try:
+            wakefern_coupons(email, password, 'shoprite')
+        except:
+            exit_with_failure("fail")
     elif store == 'pricerite':
-        coupons(email, password, 'pricerite')
+        wakefern_coupons(email, password, 'pricerite')
     elif store == 'fairway':
-        coupons(email, password, 'fairway')
+        wakefern_coupons(email, password, 'fairway')
     elif store == 'dearborn':
-        coupons(email, password, 'dearborn')
+        wakefern_coupons(email, password, 'dearborn')
     elif store == 'gourmet':
-        coupons(email, password, 'gourment')
+        wakefern_coupons(email, password, 'gourment')
     elif store == 'fresh':
-        coupons(email, password, 'fresh')
-    elif store == 'acme':
-        albertsons(email, password, 'acme')
+        wakefern_coupons(email, password, 'fresh')
     elif store == 'help':
         print('Usage: grocery_coupons.py [shoprite | pricerite | fairway | dearborn | gourmet | fresh]')
+
+    elif store == 'acme':
+        try:
+            albertsons_coupons(email, password, 'acme')
+        except:
+            exit_with_failure("fail")
     else:
         print('Unknown store: ' + args.store)
+
+
