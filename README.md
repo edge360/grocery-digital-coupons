@@ -23,6 +23,7 @@ docker-compose.yml
       - PASSWORD=password123
       - STORE=shoprite
 ```
+https://hub.docker.com/r/edge36/grocery-digital-coupons
 
 ## Usage
 
