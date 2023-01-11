@@ -153,6 +153,11 @@ def albertsons_coupons(email, password, store):
         time.sleep(5)
         print(driver.title)
 
+        #accept cookies dialogue, then wait for fade out
+        wait.until(EC.element_to_be_clickable((By.ID, 'onetrust-accept-btn-handler'))).click()
+        time.sleep(1)
+        
+        #wait for load button, continute to click until unavailable
         wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'btn.load-more')))
         print("Loading Coupons...")
         try:
