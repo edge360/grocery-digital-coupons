@@ -78,7 +78,8 @@ def wakefern_coupons(email, password, store):
             return
 
         print("Loading All Coupons to page...")
-        wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "btn.btn-default.btn-sm.ng-tns-c38-0.ng-star-inserted"))).click()
+        wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[class^='btn btn-default btn-sm ng']"))).click()
+
         print("Clipping  Coupons...")
         clipped_count = 0
         coupons = driver.find_elements(By.CLASS_NAME, 'coupon-item-container')
