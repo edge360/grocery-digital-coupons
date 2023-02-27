@@ -228,7 +228,7 @@ def initialize():
 
     driver = webdriver.Chrome(options=options)
 
-    print('Browser initialized')
+    print_with_timestamp('Browser initialized')
 
 
 if __name__ == '__main__':
