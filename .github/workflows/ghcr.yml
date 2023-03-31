@@ -14,5 +14,4 @@ jobs:
       - name: Build Docker image
         run: |
                docker build . --tag ghcr.io/edge360/grocery-digital-coupons:latest
-               docker run ghcr.io/edge360/grocery-digital-coupons:latest
                docker push ghcr.io/edge360/grocery-digital-coupons:latest
